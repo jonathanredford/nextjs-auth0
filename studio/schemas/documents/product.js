@@ -12,8 +12,24 @@ export default {
       type: "string",
     },
     {
-      title: "Main image",
-      name: "mainImage",
+      title: "Portrait Poster image",
+      name: "posterImagePortrait",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      title: "Landscape Poster image",
+      name: "posterImageLandscape",
+      type: "image",
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      title: "Background image",
+      name: "backgroundImage",
       type: "image",
       options: {
         hotspot: true,

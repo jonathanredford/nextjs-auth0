@@ -5,6 +5,7 @@ import schemaTypes from "all:part:@sanity/base/schema-type";
 
 // We import object and document schemas
 import category from "./documents/category";
+import genre from './documents/genre'
 import product from "./documents/product";
 import vendor from "./documents/vendor";
 import productVariant from "./documents/productVariant";
@@ -17,6 +18,7 @@ import route from "./documents/route";
 import siteConfig from "./documents/siteConfig";
 import person from "./documents/person";
 import popup from "./documents/popup";
+import film from './documents/film'
 
 // Object types
 import blockContent from "./objects/blockContent";
@@ -47,9 +49,11 @@ export default createSchema({
     // The following are document types which will appear
     // in the studio.
     product,
+    film,
     popup,
     vendor,
     category,
+    genre,
     brand,
     social,
     ad,
