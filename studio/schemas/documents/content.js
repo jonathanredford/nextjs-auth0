@@ -18,6 +18,12 @@ export default {
       readOnly: true
     },
     {
+      name: "url",
+      title: "URL",
+      type: "string",
+      readOnly: true
+    },
+    {
       name: "mediaType",
       title: "Media type",
       type: "string",
