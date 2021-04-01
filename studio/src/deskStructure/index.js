@@ -20,16 +20,17 @@ const hiddenDocTypes = (listItem) =>
     "siteSettings",
     "ad",
     "page",
-    "product",
+    // "product",
+    "film",
     "route",
     "siteConfig",
   ].includes(listItem.getId());
 
 export default () =>
   S.list()
-    .title("Pulp Inc.")
+    .title("MCP VOD")
     .items([
-      S.documentTypeListItem("product").title("Products"),
+      S.documentTypeListItem("film").title("Film"),
       S.listItem()
         .title("Website")
         .icon(MdWeb)
@@ -68,6 +69,13 @@ export const getDefaultDocumentNode = (props) => {
       S.view.form(),
       S.view.component(ProductsOverviewPreview).title("Products Overview"),
       S.view.component(ProductPagePreview).title("Product Page"),
+    ]);
+  }
+  if (schemaType === "film") {
+    return S.document().views([
+      S.view.form(),
+      S.view.component(ProductsOverviewPreview).title("Films Overview"),
+      S.view.component(ProductPagePreview).title("Film Page"),
     ]);
   }
   if (schemaType === "swag") {

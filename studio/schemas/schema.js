@@ -19,6 +19,7 @@ import siteConfig from "./documents/siteConfig";
 import person from "./documents/person";
 import popup from "./documents/popup";
 import film from './documents/film'
+import content from './documents/content'
 
 // Object types
 import blockContent from "./objects/blockContent";
@@ -29,6 +30,11 @@ import link from "./objects/link";
 import portableText from "./objects/portableText";
 import simplePortableText from "./objects/simplePortableText";
 import contactInfo from "./objects/contactInfo";
+import price from './objects/price'
+import geoRules from './objects/geoRules'
+import country from './objects/country'
+import video from './objects/video'
+import videoImage from './objects/videoImage'
 
 // Landing page sections
 import hero from "./objects/hero";
@@ -49,6 +55,7 @@ export default createSchema({
     // The following are document types which will appear
     // in the studio.
     product,
+    content,
     film,
     popup,
     vendor,
@@ -78,5 +85,10 @@ export default createSchema({
     localeBlockContent,
     localeString,
     productVariant,
+    price,
+    geoRules,
+    country,
+    video,
+    videoImage,
   ]),
 });
