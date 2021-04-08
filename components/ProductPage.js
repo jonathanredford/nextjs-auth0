@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import { urlFor, PortableText, getClient } from "../utils/sanity";
+import { urlFor, PortableText, getClient } from "../utils/sanity"
 
 function ProductPage(props) {
   const [count, setCount] = useState(1)
