@@ -28,7 +28,7 @@ const hiddenDocTypes = (listItem) =>
 
 export default () =>
   S.list()
-    .title("MCP VOD")
+    .title("Video On Demand CMS")
     .items([
       S.documentTypeListItem("film").title("Film"),
       S.listItem()

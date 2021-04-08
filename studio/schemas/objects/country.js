@@ -13,7 +13,7 @@ export default {
       validation: Rule => Rule.required(),
       options: {
         list: countries.map(country => ({value: country.code, title: country.name})),
-        layout: "radio",
+        layout: "select",
         direction: "vertical"
       },
       description: "Select countries to apply geo rules to (allow or block)"

@@ -17,6 +17,7 @@
   "dependencies": {
     "@sanity/client": "^2.7.1",
     "@sanity/image-url": "^0.140.22",
+    "get-video-id": "^3.2.0",
     "next": "^10.0.1",
     "next-sanity": "^0.1.8",
     "next-themes": "0.0.14",

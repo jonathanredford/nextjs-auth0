@@ -1,8 +1,23 @@
+import countries, { getCountryByCode } from '../../../lib/data/countries'
+import country from './country';
+
 export default {
   name: "price",
   title: "Price",
   type: "object",
   fields: [
+    {
+      name: "country",
+      title: "Country",
+      type: "string",
+      validation: Rule => Rule.required(),
+      options: {
+        list: countries.map(country => ({value: country.code, title: country.name})),
+        layout: "select",
+        direction: "vertical"
+      },
+      description: "Select country"
+    },
     {
       name: "currency",
       title: "Currency",
@@ -56,11 +71,13 @@ export default {
   ],
   preview: {
     select: {
+      code: "country",
       amount: "amount",
       currency: "currency", 
     },
     prepare: (selection) => {
-      const { amount, currency } = selection
+      const { code, amount, currency } = selection
+      const country = getCountryByCode(code)
       let symbol
       switch(currency) {
         case 'AUD':
@@ -86,8 +103,8 @@ export default {
       }
 
       return {
-        title: symbol + amount,
-        subtitle: currency
+        title: country?.name,
+        subtitle: currency + " " + symbol + amount
       }
     }
   }

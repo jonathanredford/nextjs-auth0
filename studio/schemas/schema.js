@@ -35,6 +35,8 @@ import geoRules from './objects/geoRules'
 import country from './objects/country'
 import video from './objects/video'
 import videoImage from './objects/videoImage'
+import s3Object from './objects/s3Object'
+import pricing from './objects/pricing'
 
 // Landing page sections
 import hero from "./objects/hero";
@@ -86,9 +88,11 @@ export default createSchema({
     localeString,
     productVariant,
     price,
+    pricing,
     geoRules,
     country,
     video,
     videoImage,
+    s3Object,
   ]),
 });

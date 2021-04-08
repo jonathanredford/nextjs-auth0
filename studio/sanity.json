@@ -5,7 +5,7 @@
     "dataset": "production"
   },
   "project": {
-    "name": "Next.JS E-commerce example",
+    "name": "Movies Change People",
     "basePath": "/studio"
   },
   "plugins": [
@@ -14,7 +14,8 @@
     "@sanity/default-layout",
     "@sanity/default-login",
     "@sanity/desk-tool",
-    "@sanity/color-input"
+    "@sanity/color-input",
+    "mux-input"
   ],
   "env": {
     "development": {
@@ -31,6 +32,10 @@
     {
       "implements": "part:@sanity/desk-tool/structure",
       "path": "./src/deskStructure"
+    },
+    {
+      "implements": "part:@sanity/base/document-actions/resolver",
+      "path": "./actions/action"
     }
   ]
 }

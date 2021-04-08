@@ -33,12 +33,6 @@ export default {
       readOnly: true,
     },
     {
-      name: "cdn_url",
-      title: "CDN URL",
-      type: "string",
-      readOnly: true,
-    },
-    {
       name: "bitrate",
       title: "Bitrate",
       type: "number",
@@ -140,7 +134,7 @@ export default {
         {
           name: "aspect_ratio",
           title: "Aspect ratio",
-          type: "string",
+          type: "number",
           readOnly: true,
         },
         {
@@ -161,6 +155,7 @@ export default {
       name: "duration",
       title: "Duration",
       type: "string",
+      description: "Seconds",
       readOnly: true,
     },
     {
@@ -173,6 +168,7 @@ export default {
       name: "size",
       title: "Size",
       type: "string",
+      description: "Megabytes",
       readOnly: true,
     },
   ],
