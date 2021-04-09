@@ -38,9 +38,9 @@ function ContentPageContainer({ contentData, preview, query }) {
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({
                 title: title,
-                price: parseInt(content.pricing.oneTimePurchasePrice[0].amount * 100),
-                currency: content.pricing.oneTimePurchasePrice[0].currency,
-                country: content.pricing.oneTimePurchasePrice[0].country,
+                price: parseInt(pricing.oneTimePurchasePrice.amount * 100),
+                currency: pricing.oneTimePurchasePrice.currency,
+                country: pricing.oneTimePurchasePrice.country,
                 cancelUrl: window.location.href,
                 images: [
                     urlFor(landscapeImage)
