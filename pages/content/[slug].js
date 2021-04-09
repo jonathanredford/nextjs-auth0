@@ -87,7 +87,7 @@ function ContentPageContainer({ contentData, preview, query }) {
 }
 
 export async function getServerSideProps({params, req, res, preview=false}) {
-    const ipdata = await getIpdata(req, null, ['ip', 'country_code', 'currency'])
+    const ipdata = await getIpdata(req)
     const query = groq`*[_type == "content" && slug.current == $slug]{
         title,
         ...,
