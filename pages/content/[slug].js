@@ -4,6 +4,7 @@ import { useRouter } from "next/router"
 import ProductPage from "../../components/ProductPage"
 import { getClient, usePreviewSubscription, urlFor } from "../../utils/sanity"
 import Json from "../../components/Json"
+import getIpdata from '../../lib/getIpdata'
 
 const query = groq`*[_type == "content" && slug.current == $slug][0]`;
 
@@ -78,7 +79,11 @@ function ContentPageContainer({ contentData, preview }) {
     );
 }
 
-export async function getStaticProps({ params, preview = false }) {
+export async function getServerSideProps({params, req, res, preview=false}) {
+    const ipdata = await getIpdata(req, null, ['ip', 'country_code', 'currency'])
+    console.log('CONTENT SLUG PAGE: getServerSideProps()')
+    console.log(JSON.stringify(ipdata))
+
     const contentData = await getClient(preview).fetch(query, {
         slug: params.slug,
     });
@@ -88,15 +93,25 @@ export async function getStaticProps({ params, preview = false }) {
     };
 }
 
-export async function getStaticPaths() {
-    const paths = await getClient().fetch(
-        `*[_type == "content" && defined(slug.current)][].slug.current`
-    );
+// export async function getStaticProps({ params, preview = false }) {
+//     const contentData = await getClient(preview).fetch(query, {
+//         slug: params.slug,
+//     });
 
-    return {
-        paths: paths.map((slug) => ({ params: { slug } })),
-        fallback: true,
-    };
-  }
+//     return {
+//         props: { preview, contentData },
+//     };
+// }
+
+// export async function getStaticPaths() {
+//     const paths = await getClient().fetch(
+//         `*[_type == "content" && defined(slug.current)][].slug.current`
+//     );
+
+//     return {
+//         paths: paths.map((slug) => ({ params: { slug } })),
+//         fallback: true,
+//     };
+//   }
 
 export default ContentPageContainer;
