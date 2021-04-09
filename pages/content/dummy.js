@@ -73,13 +73,9 @@ function ContentPageContainer({ contentData, preview, query }) {
                     Checkout
                 </button>
 
-                {
-                    pricing.oneTimePurchasePrice
-                    ? <button type="button" onClick={handleCheckout} className="inline-block items-center px-4 py-2 ml-2 border border-transparent rounded text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        {pricing.oneTimePurchasePrice.currency} ${pricing.oneTimePurchasePrice.amount}
-                    </button>
-                    : <h4 className="mt-2">This content is not available in your country.</h4>
-                }
+                <button type="button" onClick={handleCheckout} className="inline-block items-center px-4 py-2 ml-2 border border-transparent rounded text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    {pricing.oneTimePurchasePrice.currency} ${pricing.oneTimePurchasePrice.amount}
+                </button>
             </div>
             <Json json={content} />
         </>
@@ -91,10 +87,7 @@ export async function getServerSideProps({params, req, res, preview=false}) {
     const query = groq`*[_type == "content" && slug.current == $slug]{
         title,
         ...,
-        "pricing": {
-            ...pricing,
-            "oneTimePurchasePrice": pricing.oneTimePurchasePrice[country == "${ipdata.country_code}"][0]
-        }
+        'pricing.oneTimePurchasePrice': pricing.oneTimePurchasePrice[country == "AU"][0]
     }[0]`;
 
     const contentData = await getClient(preview).fetch(query, {
