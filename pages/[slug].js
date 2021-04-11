@@ -23,7 +23,8 @@ function ProductPageContainer ({ pageData, preview, slug }) {
   return <LandingPage page={page} />
 }
 
-export async function getStaticProps ({ params = {}, preview = false }) {
+export async function getServerSideProps ({ params = {}, req, res, preview = false }) {
+  res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=600'); // 600 = 10 minutes
   const { slug } = params
   const { page: pageData } = await getClient(preview).fetch(query, {
     slug
@@ -34,16 +35,16 @@ export async function getStaticProps ({ params = {}, preview = false }) {
   }
 }
 
-export async function getStaticPaths () {
-  const routes = await getClient()
-    .fetch(`*[_type == "route" && defined(slug.current)]{
-    "params": {"slug": slug.current}
-  }`)
+// export async function getStaticPaths () {
+//   const routes = await getClient()
+//     .fetch(`*[_type == "route" && defined(slug.current)]{
+//     "params": {"slug": slug.current}
+//   }`)
 
-  return {
-    paths: routes || null,
-    fallback: true
-  }
-}
+//   return {
+//     paths: routes || null,
+//     fallback: true
+//   }
+// }
 
 export default ProductPageContainer
