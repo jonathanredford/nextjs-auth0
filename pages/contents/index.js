@@ -20,13 +20,21 @@ function ContentsPageContainer({ contentsData, preview }) {
   return <ContentsPage contents={contents} />;
 }
 
-export async function getServerSideProps({ params = {}, req, res, preview = false }) {
-  res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=600'); // 600 = 10 minutes
-  const contentsData = await getClient(preview).fetch(query);
+export async function getStaticProps({ params = {}, preview = false }) {
+  const productsData = await getClient(preview).fetch(query);
 
   return {
     props: { preview, contentsData },
   };
 }
+
+// export async function getServerSideProps({ params = {}, req, res, preview = false }) {
+//   res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=600'); // 600 = 10 minutes
+//   const contentsData = await getClient(preview).fetch(query);
+
+//   return {
+//     props: { preview, contentsData },
+//   };
+// }
 
 export default ContentsPageContainer;

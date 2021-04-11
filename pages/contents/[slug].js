@@ -6,6 +6,8 @@ import { getClient, usePreviewSubscription, urlFor } from "../../utils/sanity"
 import Json from "../../components/Json"
 import getIpdata from '../../lib/getIpdata'
 
+const query = groq`*[_type == "content" && slug.current == $slug][0]`
+
 function ContentPageContainer({ contentData, preview, query }) {
     const router = useRouter();
     if (!router.isFallback && !contentData?.slug) {
@@ -38,9 +40,9 @@ function ContentPageContainer({ contentData, preview, query }) {
             headers: { 'Content-Type': 'application/json'},
             body: JSON.stringify({
                 title: title,
-                price: parseInt(pricing.oneTimePurchasePrice.amount * 100),
-                currency: pricing.oneTimePurchasePrice.currency,
-                country: pricing.oneTimePurchasePrice.country,
+                price: parseInt(pricing.oneTimePurchasePrice[0].amount * 100),
+                currency: pricing.oneTimePurchasePrice[0].currency,
+                country: pricing.oneTimePurchasePrice[0].country,
                 cancelUrl: window.location.href,
                 images: [
                     urlFor(landscapeImage)
@@ -74,9 +76,9 @@ function ContentPageContainer({ contentData, preview, query }) {
                 </button>
 
                 {
-                    pricing.oneTimePurchasePrice
+                    pricing.oneTimePurchasePrice[0]
                     ? <button type="button" onClick={handleCheckout} className="inline-block items-center px-4 py-2 ml-2 border border-transparent rounded text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        {pricing.oneTimePurchasePrice.currency} ${pricing.oneTimePurchasePrice.amount}
+                        {pricing.oneTimePurchasePrice[0].currency} ${pricing.oneTimePurchasePrice[0].amount}
                     </button>
                     : <h4 className="mt-2">This content is not available in your country.</h4>
                 }
@@ -86,45 +88,46 @@ function ContentPageContainer({ contentData, preview, query }) {
     );
 }
 
-export async function getServerSideProps({params, req, res, preview=false}) {
-    const ipdata = await getIpdata(req)
-    const query = groq`*[_type == "content" && slug.current == $slug]{
-        title,
-        ...,
-        "pricing": {
-            ...pricing,
-            "oneTimePurchasePrice": pricing.oneTimePurchasePrice[country == "${ipdata.country_code}"][0]
-        }
-    }[0]`;
+// export async function getServerSideProps({params, req, res, preview=false}) {
+//     res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=300'); // 300 = 5 minutes
+//     // const ipdata = await getIpdata(req)
+//     // const query = groq`*[_type == "content" && slug.current == $slug]{
+//     //     title,
+//     //     ...,
+//     //     "pricing": {
+//     //         ...pricing,
+//     //         "oneTimePurchasePrice": pricing.oneTimePurchasePrice[country == "${ipdata.country_code}"][0]
+//     //     }
+//     // }[0]`;
 
-    const contentData = await getClient(preview).fetch(query, {
-        slug: params.slug,
-    });
-
-    return {
-        props: { preview, contentData, query },
-    };
-}
-
-// export async function getStaticProps({ params, preview = false }) {
 //     const contentData = await getClient(preview).fetch(query, {
 //         slug: params.slug,
 //     });
 
 //     return {
-//         props: { preview, contentData },
+//         props: { preview, contentData, query },
 //     };
 // }
 
-// export async function getStaticPaths() {
-//     const paths = await getClient().fetch(
-//         `*[_type == "content" && defined(slug.current)][].slug.current`
-//     );
+export async function getStaticProps({ params, preview = false }) {
+    const contentData = await getClient(preview).fetch(query, {
+        slug: params.slug,
+    });
 
-//     return {
-//         paths: paths.map((slug) => ({ params: { slug } })),
-//         fallback: true,
-//     };
-//   }
+    return {
+        props: { preview, contentData },
+    };
+}
+
+export async function getStaticPaths() {
+    const paths = await getClient().fetch(
+        `*[_type == "content" && defined(slug.current)][].slug.current`
+    );
+
+    return {
+        paths: paths.map((slug) => ({ params: { slug } })),
+        fallback: true,
+    };
+  }
 
 export default ContentPageContainer;

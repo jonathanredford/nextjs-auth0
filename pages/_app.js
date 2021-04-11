@@ -4,23 +4,26 @@ import Layout from "../components/Layout";
 import '@stripe/stripe-js'
 import getIpdata from '../lib/getIpdata'
 import Cookies from 'js-cookie'
+import { ProxyContextProvider } from '../context/proxy-context'
 
 function MyApp({ Component, pageProps }) {
-    Cookies.set('ipData', JSON.stringify(pageProps.ipData), {expires: 1}) // expires in 1 day
+    Cookies.set('proxyData', JSON.stringify(pageProps.proxyData), {expires: 1}) // expires in 1 day
     return (
-        <Layout>
-            <Component {...pageProps} />
-        </Layout>
+        <ProxyContextProvider>
+            <Layout>
+                <Component {...pageProps} />
+            </Layout>
+        </ProxyContextProvider>
     );
 }
 
 MyApp.getInitialProps = async (appContext) => {
     const appProps = await App.getInitialProps(appContext)
     const { ctx: { req, res } } = appContext
-    const ipdata = await getIpdata(req)
+    const proxyData = await getIpdata(req)
     // console.log(ipdata)
-    if(ipdata) {
-        appProps.pageProps.ipData = ipdata
+    if(proxyData) {
+        appProps.pageProps.proxyData = proxyData
     }
     return {...appProps}
 }
