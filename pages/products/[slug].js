@@ -46,7 +46,7 @@ function ProductPageContainer({ productData, preview }) {
   );
 }
 
-export async function getStaticProps({ params, preview = false }) {
+export async function getServerSideProps({ params, preview = false }) {
   const productData = await getClient(preview).fetch(query, {
     slug: params.slug,
   });
@@ -56,15 +56,15 @@ export async function getStaticProps({ params, preview = false }) {
   };
 }
 
-export async function getStaticPaths() {
-  const paths = await getClient().fetch(
-    `*[_type == "product" && defined(slug.current)][].slug.current`
-  );
+// export async function getStaticPaths() {
+//   const paths = await getClient().fetch(
+//     `*[_type == "product" && defined(slug.current)][].slug.current`
+//   );
 
-  return {
-    paths: paths.map((slug) => ({ params: { slug } })),
-    fallback: true,
-  };
-}
+//   return {
+//     paths: paths.map((slug) => ({ params: { slug } })),
+//     fallback: true,
+//   };
+// }
 
 export default ProductPageContainer;
