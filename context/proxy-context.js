@@ -18,7 +18,7 @@ export const ProxyContextProvider = (props) => {
     const prev = useRef();
 
     // Read and Write Proxy State to Local Storage
-    useEffect(() => {
+    useEffect(async () => {
         if (proxy.country_code === null) {
             let localState
             try  {
@@ -30,6 +30,21 @@ export const ProxyContextProvider = (props) => {
                 console.info('reading local storage');
                 prev.current = localState.ip;
                 setProxy(localState);
+            } else {
+                let ipData
+                try {
+                    ipData = await fetch('/api/ipdata/lookup')
+                    .then(res => res.json())
+                    .then(data => data)
+                } catch(err) {
+                    console.log('Error fetching ip data')
+                }
+                if(ipData) {
+                    prev.current = ipData.ip
+                    setProxy(ipData)
+                    Cookies.set('proxyData', JSON.stringify(ipData), {expires: 1}) // expires in 1 day
+                }
+
             }
         } else if (prev.current !== proxy.ip) {
             console.info('writing local storage');
