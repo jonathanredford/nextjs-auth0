@@ -41,7 +41,7 @@ const ContentPage = (props) => {
       <Fragment>
         <div className="container mx-auto px-6 pt-48">
           <div
-            className="absolute top-0 left-0 right-0 min-h-screen-75 z-0 bg-no-repeat bg-cover bg-center"
+            className="absolute top-0 left-0 right-0 min-h-screen-75 z-0 bg-no-repeat bg-cover bg-top"
             style={{backgroundImage: `url("${urlFor(backgroundImage).auto("format").width(1920).fit("crop").quality(80)}")`}}
           >
             <div className="absolute top-0 left-0 right-0 min-h-screen-75 z-0 bg-gradient-to-t from-gray-900 to-gray-900-opacity-40" />

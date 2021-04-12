@@ -107,28 +107,8 @@ function ContentPageContainer({ contentData, preview, query }) {
     );
 }
 
-// export async function getServerSideProps({params, req, res, preview=false}) {
-//     res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=300'); // 300 = 5 minutes
-//     // const ipdata = await getIpdata(req)
-//     // const query = groq`*[_type == "content" && slug.current == $slug]{
-//     //     title,
-//     //     ...,
-//     //     "pricing": {
-//     //         ...pricing,
-//     //         "oneTimePurchasePrice": pricing.oneTimePurchasePrice[country == "${ipdata.country_code}"][0]
-//     //     }
-//     // }[0]`;
-
-//     const contentData = await getClient(preview).fetch(query, {
-//         slug: params.slug,
-//     });
-
-//     return {
-//         props: { preview, contentData, query },
-//     };
-// }
-
-export async function getStaticProps({ params, preview = false }) {
+export async function getServerSideProps({params, req, res, preview=false}) {
+    res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=240'); // 300 = 5 minutes
     const contentData = await getClient(preview).fetch(query, {
         slug: params.slug,
     });
@@ -138,15 +118,25 @@ export async function getStaticProps({ params, preview = false }) {
     };
 }
 
-export async function getStaticPaths() {
-    const paths = await getClient().fetch(
-        `*[_type == "content" && defined(slug.current)][].slug.current`
-    );
+// export async function getStaticProps({ params, preview = false }) {
+//     const contentData = await getClient(preview).fetch(query, {
+//         slug: params.slug,
+//     });
 
-    return {
-        paths: paths.map((slug) => ({ params: { slug } })),
-        fallback: true,
-    };
-  }
+//     return {
+//         props: { preview, contentData },
+//     };
+// }
+
+// export async function getStaticPaths() {
+//     const paths = await getClient().fetch(
+//         `*[_type == "content" && defined(slug.current)][].slug.current`
+//     );
+
+//     return {
+//         paths: paths.map((slug) => ({ params: { slug } })),
+//         fallback: true,
+//     };
+//   }
 
 export default ContentPageContainer;
