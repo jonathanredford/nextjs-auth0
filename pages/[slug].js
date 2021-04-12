@@ -45,7 +45,7 @@ function ContentPageContainer({ contentData, preview, query }) {
     } = content
 
     const oneTimePurchasePrice = () => {
-        if(!pricing?.oneTimePurchasePrice.length || !proxy?.country_code) {
+        if(!pricing?.oneTimePurchasePrice?.length || !proxy?.country_code) {
             return null
         }
         let price = null
@@ -69,7 +69,7 @@ function ContentPageContainer({ contentData, preview, query }) {
                 i = pricing.plans.length
             }
         }
-        if(plan && plan.subscriptionPrice.length) {
+        if(plan && plan.subscriptionPrice?.length) {
             let price = null
             for(var i = 0; i < plan.subscriptionPrice.length; i++) {
                 if(plan.subscriptionPrice[i].country === proxy.country_code) {
