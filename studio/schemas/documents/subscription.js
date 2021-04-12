@@ -1,4 +1,4 @@
-import { ImLoop2 } from "react-icons/Im"
+import { ImLoop2 } from "react-icons/im"
 
 export default {
   name: "subscription",
