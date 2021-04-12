@@ -1,4 +1,5 @@
-import countries, { getCountryByCode } from '../../../lib/data/countries'
+import React from 'react'
+import countries, { getCountryByCode, getPriceCountryData } from '../../../lib/data/countries'
 import country from './country';
 
 export default {
@@ -108,4 +109,4 @@ export default {
       }
     }
   }
-};
+}

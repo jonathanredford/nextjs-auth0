@@ -1,4 +1,4 @@
-import { MdVideoLibrary } from "react-icons/md";
+import { MdVideoLibrary } from "react-icons/md"
 
 export default {
   name: "content",
@@ -15,6 +15,7 @@ export default {
       name: "slug",
       title: "Slug",
       type: "slug",
+      validation: Rule => Rule.required(),
       options: {
         source: "title",
         maxLength: 96,
@@ -65,12 +66,12 @@ export default {
         },
       ],
     },
-    {
-      name: "geoRules",
-      title: "Geo Restrictions",
-      type: "geoRules",
-      // description: "Only applies if countries are added in the countries field",
-    },
+    // {
+    //   name: "geoRules",
+    //   title: "Geo Restrictions",
+    //   type: "geoRules",
+    //   // description: "Only applies if countries are added in the countries field",
+    // },
     {
       name: "pricing",
       title: "Pricing",

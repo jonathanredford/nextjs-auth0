@@ -20,6 +20,7 @@ import person from "./documents/person";
 import popup from "./documents/popup";
 import film from './documents/film'
 import content from './documents/content'
+import subscription from './documents/subscription'
 
 // Object types
 import blockContent from "./objects/blockContent";
@@ -58,6 +59,7 @@ export default createSchema({
     // in the studio.
     product,
     content,
+    subscription,
     film,
     popup,
     vendor,

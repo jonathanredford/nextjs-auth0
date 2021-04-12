@@ -1,49 +1,89 @@
-import { useEffect, useState } from 'react'
+import { useState, Fragment } from 'react'
 import Image from 'next/image'
-import DarkModeSwitch from './DarkModeSwitch'
-import {useTheme} from 'next-themes'
+import Link from 'next/link'
 
-const Navbar = () => {
-    const [mounted, setMounted] = useState(false)
-    const {theme, setTheme} = useTheme()
-
-    useEffect(() => setMounted(true), [])
-
-    if (!mounted) return null
+const Navbar = () => {   
+    const [menuOpen, setMenuOpen] = useState(false)
+    const handleMenu = () => setMenuOpen(!menuOpen) 
     
     return (
-        <div className="relative light:bg-white">
-            <div className="px-4 sm:px-6 border-b-2 border-gray-100 dark:border-gray-800">
-                <div className="flex justify-between items-center max-w-7xl mx-auto py-6 md-justify-star md:space-x-10">
-                    <div className="flex justify-start lg:w-0 lg:flex-1">
-                        <a href="#" className="dark:hidden flex items-center">
-                            <span className="sr-only">Workflow</span>
-                            {
-                                theme === 'dark'
-                                ? <Image className="h8 w-auto sm:h-10" src="https://assets.website-files.com/5f5ed6103fe3bd374dabb3c9/5f5ef009d38d5781dd216dab_op-logo.png" width="300" height="36" alt="" />
-                                : <Image className="h8 w-auto sm:h-10" src="https://uploads-ssl.webflow.com/5f5ed6103fe3bd374dabb3c9/605d662474f81a15e1d7a4c7_Online_Premieres_Logo.png" width="300" height="36" alt="" />
-                                
-                            }
-                        </a>
+        <header className="relative bg-gradient-to-b from-gray-900 via-gray-900-opacity-50 z-10">
+            <div className="container mx-auto px-6 py-4">
+                <div className="flex items-center justify-between">
+                    
+                    <div className="w-full">
+                        <Link href="/">
+                            <a className="flex items-center">
+                                <span className="sr-only">Online Premieres Logo</span>
+                                <Image className="h8 w-auto sm:h-10" src="https://assets.website-files.com/5f5ed6103fe3bd374dabb3c9/5f5ef009d38d5781dd216dab_op-logo.png" width="300" height="36" alt="" />
+                            </a>
+                        </Link>
                     </div>
-                    <nav className="hidden md:flex space-x-10">
 
-                    </nav>
-                    <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-                        <a href="#" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:hover:text-gray-100">
-                            Sign in
-                        </a>
-                        <a href="#" className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white dark:text-indigo-500 bg-indigo-600 dark:bg-white hover:bg-indigo-700 dark:hover:bg-indigo-700 dark:hover:text-white">
-                            Sign up
-                        </a>
-                        <div className="ml-8 flex items-center">
-                            <DarkModeSwitch />
+                    
+
+                    <div className="flex items-center justify-end w-full">
+                        <nav
+                            className="hidden sm:visible sm:flex sm:justify-center sm:items-center"
+                        >
+                            <div className="flex flex-row items-center">
+                                <NavItems />
+                            </div>
+                        </nav>
+                        <div className="flex sm:hidden">
+                            <button
+                                onClick={handleMenu}
+                                type="button"
+                                className="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-500"
+                                aria-label="toggle menu"
+                            >
+                                <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current">
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
+                                    />
+                                </svg>
+                            </button>
                         </div>
+                        
                     </div>
                 </div>
+
+                <nav
+                    className={`${
+                    menuOpen ? "" : "hidden"
+                    } sm:hidden sm:flex sm:justify-center sm:items-center`}
+                >
+                    <div className="flex flex-col sm:flex-row">
+                        <NavItems />
+                    </div>
+                </nav>
+
             </div>
-        </div>
+        </header>
     )
 }
 
 export default Navbar
+
+const NavItems = () => {
+    return (
+        <Fragment>
+            <Link href="/browse">
+                <a className="mt-3 text-base text-gray-300 hover:text-gray-100 sm:mx-3 sm:mt-0">
+                    Browse
+                </a>
+            </Link>
+            <Link href="/signin">
+                <a className="mt-3 text-base text-gray-300 hover:text-gray-100 sm:mx-3 sm:mt-0">
+                    Sign in
+                </a>
+            </Link>
+            <Link href="/signup">
+                <a className="mt-3 text-base text-white sm:mx-3 sm:mt-0 px-4 py-2 border border-transparent rounded-md bg-red-700 hover:bg-red-900">
+                    Sign Up
+                </a>
+            </Link>
+        </Fragment>
+    )
+}

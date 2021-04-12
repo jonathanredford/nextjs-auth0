@@ -1,7 +1,7 @@
 import Error from "next/error";
 import { useRouter } from "next/router";
-import { getClient, usePreviewSubscription } from "../../utils/sanity";
-import ContentsPage from "../../components/ContentsPage";
+import { getClient, usePreviewSubscription } from "../utils/sanity";
+import ContentsPage from "../components/ContentsPage";
 
 const query = `//groq
   *[_type == "content" && defined(slug.current)]

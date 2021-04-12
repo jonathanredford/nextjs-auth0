@@ -42,6 +42,17 @@ export default {
       description: "Choose to offer this content for free or require access"
     },
     {
+      name: "plans",
+      title: "Plans",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: { type: "subscription" },
+        },
+      ],
+    },
+    {
       name: "oneTimePurchasePrice",
       title: "One-time purchase price",
       description: "Ensure only one price per country is added. If multiple prices for a single country exist, the first price will take precedence.",

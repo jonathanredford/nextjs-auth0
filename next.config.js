@@ -7,5 +7,11 @@ const STUDIO_REWRITE = {
 }
 
 module.exports = {
+  images: {
+    domains: [
+      'uploads-ssl.webflow.com',
+      'assets.website-files.com'
+    ]
+  },
   rewrites: () => [STUDIO_REWRITE],
 }
