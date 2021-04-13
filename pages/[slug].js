@@ -11,7 +11,11 @@ const query = groq`*[_type == "content" && slug.current == $slug]{
     "pricing": {
         ...pricing,
         "plans": pricing.plans[]->
-    }
+    },
+    "siteConfig": *[_type == "siteConfig"]{
+        defaultCurrency,
+        defaultCountry
+    }[0]
 }[0]`
 
 function ContentPageContainer({ contentData, preview, query }) {
@@ -44,7 +48,7 @@ function ContentPageContainer({ contentData, preview, query }) {
         slug,
     } = content
 
-    const oneTimePurchasePrice = () => {
+    const getOneTimePurchasePrice = () => {
         if(!pricing?.oneTimePurchasePrice?.length || !proxy?.country_code) {
             return null
         }
@@ -101,7 +105,7 @@ function ContentPageContainer({ contentData, preview, query }) {
                 slug={slug?.current}
                 content={content}
                 plan={getPlan()}
-                oneTimePurchasePrice={oneTimePurchasePrice()}
+                oneTimePurchasePrice={getOneTimePurchasePrice()}
             />
         </>
     );

@@ -19,6 +19,18 @@ export const ProxyContextProvider = (props) => {
 
     // Read and Write Proxy State to Local Storage
     useEffect(async () => {
+        let localState
+        try  {
+            localState = JSON.parse(Cookies.get('proxyData'))
+        } catch(err) {
+            console.log('proxyData not found in cookies')
+        }
+        if (localState) {
+            console.info('reading local storage');
+            prev.current = localState.ip;
+            setProxy(localState);
+        }
+        
         let ipData
         try {
             ipData = await fetch('/api/ipdata/lookup')
@@ -32,37 +44,6 @@ export const ProxyContextProvider = (props) => {
             setProxy(ipData)
             Cookies.set('proxyData', JSON.stringify(ipData), {expires: 1}) // expires in 1 day
         }
-        // if (proxy.country_code === null) {
-        //     let localState
-        //     try  {
-        //         localState = JSON.parse(Cookies.get('proxyData'))
-        //     } catch(err) {
-        //         console.log('proxyData not found in cookies')
-        //     }
-        //     if (localState) {
-        //         console.info('reading local storage');
-        //         prev.current = localState.ip;
-        //         setProxy(localState);
-        //     } else {
-        //         let ipData
-        //         try {
-        //             ipData = await fetch('/api/ipdata/lookup')
-        //             .then(res => res.json())
-        //             .then(data => data)
-        //         } catch(err) {
-        //             console.log('Error fetching ip data')
-        //         }
-        //         if(ipData) {
-        //             prev.current = ipData.ip
-        //             setProxy(ipData)
-        //             Cookies.set('proxyData', JSON.stringify(ipData), {expires: 1}) // expires in 1 day
-        //         }
-
-        //     }
-        // } else if (prev.current !== proxy.ip) {
-        //     console.info('writing local storage');
-        //     localStorage.setItem('proxyData', JSON.stringify(proxy));
-        // }
     }, []);
 
     return (

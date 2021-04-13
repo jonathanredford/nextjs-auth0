@@ -38,6 +38,7 @@ import video from './objects/video'
 import videoImage from './objects/videoImage'
 import s3Object from './objects/s3Object'
 import pricing from './objects/pricing'
+import currency from './objects/currency'
 
 // Landing page sections
 import hero from "./objects/hero";
@@ -91,6 +92,7 @@ export default createSchema({
     productVariant,
     price,
     pricing,
+    currency,
     geoRules,
     country,
     video,

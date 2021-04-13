@@ -6,7 +6,7 @@ import Json from "../components/Json"
 const ContentPage = (props) => {
     const [count, setCount] = useState(1)
     const handleCount = (value) => !(count === 0 && value === -1) ? setCount(count + value) : count
-    const { title, defaultProductVariant, verticalImage, mainImage, landscapeImage, backgroundImage, pricing, body, content, oneTimePurchasePrice, plan } = props;
+    const { title, defaultProductVariant, verticalImage, mainImage, landscapeImage, backgroundImage, pricing, body, content, oneTimePurchasePrice=null, plan=null } = props;
     const handleCheckout = async () => {
       var stripe = Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
       fetch('/api/checkout', {
@@ -75,6 +75,15 @@ const ContentPage = (props) => {
                     <button onClick={handleCheckout} className="ml-2 px-8 py-2 bg-red-700 text-white text-sm font-medium rounded hover:bg-gray-100 hover:text-red-700 focus:outline-none">
                       Subscribe ${plan.subscriptionPrice.amount}
                     </button>
+                  }
+                  {
+                    !oneTimePurchasePrice && !plan
+                    ? (
+                      <div className="px-4 py-2 rounded-md bg-gray-500 bg-opacity-50 text-white text-sm border border-red-700 flex items-center">
+                        <p className="">This content is not available in your country</p>
+                      </div>
+                    )
+                    : null
                   }
                 </div>
 

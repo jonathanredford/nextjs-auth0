@@ -28,6 +28,18 @@ export default {
       type: "string",
     },
     {
+      title: "Default currency",
+      name: "defaultCurrency",
+      type: "currency",
+      description: "If the visitor's currency is not able to be determined, the default currency will be used as a fallback (optional)"
+    },
+    {
+      title: "Default country",
+      name: "defaultCountry",
+      type: "country",
+      description: "If the visitor's country is not able to be determined, the default country will be used as a fallback  (optional)"
+    },
+    {
       title: "Brand logo",
       description:
         "Best choice is to use an SVG where the color are set with currentColor",
