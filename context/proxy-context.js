@@ -19,17 +19,17 @@ export const ProxyContextProvider = (props) => {
 
     // Read and Write Proxy State to Local Storage
     useEffect(async () => {
-        let localState
-        try  {
-            localState = JSON.parse(Cookies.get('proxyData'))
-        } catch(err) {
-            console.log('proxyData not found in cookies')
-        }
-        if (localState) {
-            console.info('reading local storage');
-            prev.current = localState.ip;
-            setProxy(localState);
-        }
+        // let localState
+        // try  {
+        //     localState = JSON.parse(Cookies.get('proxyData'))
+        // } catch(err) {
+        //     console.log('proxyData not found in cookies')
+        // }
+        // if (localState) {
+        //     console.info('reading local storage');
+        //     prev.current = localState.ip;
+        //     setProxy(localState);
+        // }
         
         let ipData
         try {
