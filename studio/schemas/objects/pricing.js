@@ -53,8 +53,19 @@ export default {
       ],
     },
     {
-      name: "oneTimePurchasePrice",
-      title: "One-time purchase price",
+      name: "buy",
+      title: "Buy price",
+      description: "Ensure only one price per country is added. If multiple prices for a single country exist, the first price will take precedence.",
+      type: "array",
+      of: [
+        {
+          type: "price"
+        }
+      ],
+    },
+    {
+      name: "rent",
+      title: "Rent price",
       description: "Ensure only one price per country is added. If multiple prices for a single country exist, the first price will take precedence.",
       type: "array",
       of: [

@@ -1,29 +1,143 @@
 const stripe = require('stripe')('sk_test_Ea2ZuA6JuBTggG7UoCyfPPSx')
+import { groq } from "next-sanity"
+import { getClient, usePreviewSubscription, urlFor } from "../../utils/sanity"
+import getIpdata from '../../lib/getIpdata'
+import getPrices from '../../lib/getPrices'
 
 export default async (req, res) => {
-    const { body } = req
+    const { query } = req
+    const { callback_url=process.env.APP_URL, type, id} = query
 
-    const session = await stripe.checkout.sessions.create({
-        mode: 'payment',
-        success_url: 'http://localhost:3000/success',
-        cancel_url: body.cancelUrl,
-        payment_method_types: ['card'],
-        line_items: [
-            {
-                quantity: 1,
-                price_data: {
-                    currency: body.currency,
-                    product_data: {
-                        name: body.title,
-                        description: `${body.title} product description`,
-                        images: body.images || []
-                    },
-                    unit_amount: body.price
-                },
-                tax_rates: ['txr_1HUNI2JUjQ8PcHCfctn6WwSY'],
-            },
-        ],
+    const documentPromise = new Promise(async resolve => {
+        // let projection
+        // switch(query.type) {
+        //     case 'subscription':
+        //         projection = `"pricing": {
+        //             ...pricing,
+        //             "oneTimePurchasePrice": {
+        //                 ...pricing.oneTimePurchasePrice[country == "${proxy.country_code}"][0]
+        //             }
+        //         }`
+        //     default:
+        //         projection = `"pricing": {
+        //             ...pricing,
+        //             "oneTimePurchasePrice": {
+        //                 ...pricing.oneTimePurchasePrice[country == "${proxy.country_code}"][0]
+        //             }
+        //         }`
+        // }
+        const groqQuery = groq`*[_id == "${id}"]{
+            ...,
+            "pricing": {
+                ...pricing,
+                "plans": pricing.plans[]->
+            }
+        }[0]`
+        await getClient().fetch(groqQuery).then(result => {
+            resolve(result)
+        })
     })
-    console.log(JSON.stringify(session, null, 2))
-    return res.json(JSON.stringify(session, null, 2))
+
+    const ipDataPromise = new Promise(async resolve => {
+        const response = await getIpdata(req)
+        resolve(response)
+    })
+
+    const {document, proxy} = await Promise.all([documentPromise, ipDataPromise]).then(([document, proxy]) => {
+        return {
+            document: document,
+            proxy: proxy
+        }
+    })
+
+    // return res.json(JSON.stringify({
+    //     document: document,
+    //     proxy: proxy
+    // }, null, 2))
+
+    if(document && proxy) {
+        const { _id, _type, title, slug, verticalImage } = document
+        const mode = query.type === 'subscribe' ? 'subscription' : 'payment'
+        const sessionOptions = {
+            mode: mode,
+            payment_method_types: ['card'],
+            success_url: callback_url + '?checkout=success',
+            cancel_url: callback_url + '?checkout=cancel',
+            line_items: []
+        }
+        const prices = getPrices(document, proxy)
+        
+        if(type === 'buy' || type === 'rent') {
+            const { currency, amount } = prices[type]
+            const lineItem = {
+                quantity: 1,
+                tax_rates: ['txr_1HUNI2JUjQ8PcHCfctn6WwSY'],
+            }
+            lineItem.price_data = {
+                currency: currency,
+                unit_amount: Math.round(amount * 100),
+                product_data: {
+                    name: title,
+                    description: type.charAt(0).toUpperCase() + type.slice(1), // transform first character of type to uppercase
+                    images: [
+                        urlFor(verticalImage)
+                        .auto("format")
+                        .fit("crop")
+                        .width(768)
+                        .quality(80)
+                        .url()
+                    ]
+                },
+            }
+            sessionOptions.line_items.push(lineItem)
+        }
+
+        if(type === 'subscribe') {
+            const { currency, amount } = prices.plan.price
+            const lineItem = {
+                quantity: 1,
+                tax_rates: ['txr_1HUNI2JUjQ8PcHCfctn6WwSY'],
+            }
+            lineItem.price_data = {
+                currency: currency,
+                unit_amount: Math.round(amount * 100),
+                recurring: {
+                    interval: 'month',
+                    interval_count: 1
+                },
+                product_data: {
+                    name: prices.plan.title,
+                    description: type.charAt(0).toUpperCase() + type.slice(1), // transform first character of type to uppercase
+                    images: [
+                        urlFor(verticalImage)
+                        .auto("format")
+                        .fit("crop")
+                        .width(768)
+                        .quality(80)
+                        .url()
+                    ]
+                },
+            }
+            sessionOptions.line_items.push(lineItem)
+        }
+
+
+
+        let session
+        try {
+            if(sessionOptions.line_items.length) {
+                session = await stripe.checkout.sessions.create(sessionOptions)
+            }
+        } catch(err) {
+            console.log('Error creating session', err)
+        }
+
+        if(session) {
+            return res.json(JSON.stringify(session, null, 2))
+        } else {
+            return res.status(500).end()
+        }
+    }
+
+    return res.status(500).end()
 }

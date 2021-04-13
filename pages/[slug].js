@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import ContentPage from '../components/ContentPage'
 import { getClient, usePreviewSubscription, urlFor } from "../utils/sanity"
 import { ProxyContext } from '../context/proxy-context'
+import getPrices from '../lib/getPrices'
 
 const query = groq`*[_type == "content" && slug.current == $slug]{
     ...,
@@ -39,7 +40,6 @@ function ContentPageContainer({ contentData, preview, query }) {
         landscapeImage,
         backgroundImage,
         description,
-        pricing,
         plans,
         body,
         tags,
@@ -48,47 +48,7 @@ function ContentPageContainer({ contentData, preview, query }) {
         slug,
     } = content
 
-    const getOneTimePurchasePrice = () => {
-        if(!pricing?.oneTimePurchasePrice?.length || !proxy?.country_code) {
-            return null
-        }
-        let price = null
-        for(var i = 0; i < pricing.oneTimePurchasePrice.length; i++) {
-            if(pricing.oneTimePurchasePrice[i].country === proxy?.country_code) {
-                price = pricing.oneTimePurchasePrice[i]
-                i = pricing.oneTimePurchasePrice.length
-            }
-        }
-        return price
-    }
-
-    const getPlan = () => {
-        if(!pricing?.plans?.length || !proxy?.country_code) {
-            return null
-        }
-        let plan = null
-        for(var i = 0; i < pricing.plans.length; i++) {
-            if(pricing.plans[i].availability === 'public') {
-                plan = pricing.plans[i]
-                i = pricing.plans.length
-            }
-        }
-        if(plan && plan.subscriptionPrice?.length) {
-            let price = null
-            for(var i = 0; i < plan.subscriptionPrice.length; i++) {
-                if(plan.subscriptionPrice[i].country === proxy.country_code) {
-                    price =  plan.subscriptionPrice[i]
-                    i = plan.subscriptionPrice.length
-                }
-            }
-            if(price) {
-                plan.subscriptionPrice = price
-            } else {
-                plan = null
-            }
-        }
-        return plan
-    }
+    const prices = getPrices(content, proxy)
 
     return (
         <>
@@ -99,13 +59,11 @@ function ContentPageContainer({ contentData, preview, query }) {
                 mainImage={landscapeImage}
                 landscapeImage={landscapeImage}
                 backgroundImage={backgroundImage}
-                pricing={pricing}
                 blurb={description}
                 body={description}
                 slug={slug?.current}
                 content={content}
-                plan={getPlan()}
-                oneTimePurchasePrice={getOneTimePurchasePrice()}
+                prices={prices}
             />
         </>
     );

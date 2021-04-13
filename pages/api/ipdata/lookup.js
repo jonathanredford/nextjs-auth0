@@ -22,7 +22,7 @@ export default async (req, res) => {
         console.log('cookie ip matches ' + ip)
         return res.json(cookie)
     } else {
-        console.log('cookie ip does not match ' + ip)
+        cookie && console.log('cookie ip does not match ' + ip)
         if(fields) fields = fields.split(',')
         const result = await new Promise(resolve => {
             ipdata.lookup(ip, field, fields)

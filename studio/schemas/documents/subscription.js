@@ -31,8 +31,8 @@ export default {
       type: 'image'
     },
     {
-      name: "subscriptionPrice",
-      title: "Subscription price",
+      name: "price",
+      title: "Price",
       type: "array",
       of: [
         {
