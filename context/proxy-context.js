@@ -8,9 +8,10 @@ export const ProxyContextProvider = (props) => {
         ip: null,
         // countryName: null,
         country_code: null,
-        currency: null
+        currency: null,
         // isProxy: false,
         // proxyType: '',
+        loading: true
     };
 
     // Declare shareable proxy state
@@ -41,7 +42,10 @@ export const ProxyContextProvider = (props) => {
         }
         if(ipData) {
             prev.current = ipData.ip
-            setProxy(ipData)
+            ipData.loading = false
+            setTimeout(() => {
+                setProxy(ipData)
+            }, 1000);
             Cookies.set('proxyData', JSON.stringify(ipData), {expires: 1}) // expires in 1 day
         }
     }, []);

@@ -22,7 +22,7 @@ const query = groq`*[_type == "content" && slug.current == $slug]{
 
 function ContentPageContainer({ contentData, preview, query }) {
     const [ proxy ] = useContext(ProxyContext)
-    const [ activePrices, setActivePrices ] = useState(null)
+    const [ prices, setPrices ] = useState(null)
 
     
     const router = useRouter();
@@ -37,7 +37,7 @@ function ContentPageContainer({ contentData, preview, query }) {
     });
 
     useEffect(() => {
-        setActivePrices(getPrices(JSON.parse(JSON.stringify(content)), proxy))
+        setPrices(getPrices(JSON.parse(JSON.stringify(content)), proxy))
     }, [proxy])
 
     // const p = getPrices(content, proxy)
@@ -56,7 +56,7 @@ function ContentPageContainer({ contentData, preview, query }) {
 
     return (
         <>
-            {/* <ContentPage
+            <ContentPage
                 id={_id}
                 title={title}
                 verticalImage={verticalImage}
@@ -68,8 +68,8 @@ function ContentPageContainer({ contentData, preview, query }) {
                 slug={slug?.current}
                 content={content}
                 prices={prices}
-            /> */}
-            <Json json={content} />
+            />
+            {/* <Json json={content} /> */}
         </>
     );
 }

@@ -1,9 +1,10 @@
-import { Fragment } from 'react'
-import {useState} from 'react'
+import { Fragment, useState, useContext } from 'react'
 import { urlFor, PortableText, getClient } from "../utils/sanity"
 import Json from "../components/Json"
+import { ProxyContext } from '../context/proxy-context'
 
 const ContentPage = (props) => {
+    const [ proxy ] = useContext(ProxyContext)
     const [count, setCount] = useState(1)
     const handleCount = (value) => !(count === 0 && value === -1) ? setCount(count + value) : count
     const { id, title, defaultProductVariant, verticalImage, mainImage, landscapeImage, backgroundImage, body, content, prices } = props;
@@ -18,6 +19,8 @@ const ContentPage = (props) => {
             stripe.redirectToCheckout({ sessionId: session.id })
         })
     }
+
+    console.log(prices)
 
     return (
         <Fragment>
@@ -48,11 +51,15 @@ const ContentPage = (props) => {
                             <div className="flex items-center mt-6">
                                 
                                 {
-                                    prices?.available === true
-                                    ? <PricingButtons prices={prices} />
-                                    : <div className="px-4 py-2 rounded-md bg-gray-500 bg-opacity-50 text-white text-sm flex items-center">
-                                        <p className="">This content is not available in your country</p>
-                                    </div>
+                                    !proxy.loading
+                                    ? (
+                                        prices?.available === true
+                                        ? <PricingButtons prices={prices} />
+                                        : <div className="px-4 py-2 rounded-md bg-gray-500 bg-opacity-50 text-white text-sm flex items-center">
+                                            <p className="">This content is not available in your country</p>
+                                        </div>
+                                    )
+                                    : <div className="px-4 py-2 text-sm opacity-0 cursor-default">PLACEHOLDER</div>
                                 }
                             </div>
 
@@ -76,7 +83,7 @@ const ContentPage = (props) => {
                             : <h4 className="mt-2">This content is not available in your country.</h4>
                         }
                     </div> */}
-                    {/* <Json json={content} /> */}
+                    <Json json={content} />
                 </div>
             </div>
         </Fragment>
