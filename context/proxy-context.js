@@ -43,9 +43,7 @@ export const ProxyContextProvider = (props) => {
         if(ipData) {
             prev.current = ipData.ip
             ipData.loading = false
-            setTimeout(() => {
-                setProxy(ipData)
-            }, 1000);
+            setProxy(ipData)
             Cookies.set('proxyData', JSON.stringify(ipData), {expires: 1}) // expires in 1 day
         }
     }, []);
