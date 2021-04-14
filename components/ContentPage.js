@@ -8,17 +8,6 @@ const ContentPage = (props) => {
     const [count, setCount] = useState(1)
     const handleCount = (value) => !(count === 0 && value === -1) ? setCount(count + value) : count
     const { id, title, defaultProductVariant, verticalImage, mainImage, landscapeImage, backgroundImage, body, content, prices } = props;
-    
-    const handleCheckout = async (type) => {
-        var stripe = Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
-
-        fetch(`/api/checkout?id=${id}&type=${type}&callback_url=${window.location.origin}${window.location.pathname}`)
-        .then(res => res.json())
-        .then(session => {
-            console.log(session)
-            stripe.redirectToCheckout({ sessionId: session.id })
-        })
-    }
 
     console.log(prices)
 
@@ -54,7 +43,7 @@ const ContentPage = (props) => {
                                     !proxy.loading
                                     ? (
                                         prices?.available === true
-                                        ? <PricingButtons prices={prices} />
+                                        ? <PricingButtons contentId={id} prices={prices} />
                                         : <div className="px-4 py-2 rounded-md bg-gray-500 bg-opacity-50 text-white text-sm flex items-center">
                                             <p className="">This content is not available in your country</p>
                                         </div>
@@ -92,7 +81,18 @@ const ContentPage = (props) => {
 
 export default ContentPage;
 
-const PricingButtons = ({prices}) => {
+const PricingButtons = ({contentId, prices}) => {
+    const handleCheckout = async (type) => {
+        var stripe = Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+
+        fetch(`/api/checkout?id=${contentId}&type=${type}&callback_url=${window.location.origin}${window.location.pathname}`)
+        .then(res => res.json())
+        .then(session => {
+            console.log(session)
+            stripe.redirectToCheckout({ sessionId: session.id })
+        })
+    }
+
     return (
         <Fragment>
             {
