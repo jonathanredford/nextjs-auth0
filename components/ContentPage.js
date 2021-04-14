@@ -19,8 +19,6 @@ const ContentPage = (props) => {
         })
     }
 
-    console.log(prices)
-
     return (
         <Fragment>
             <div className="container mx-auto px-6 pt-48">
@@ -48,32 +46,13 @@ const ContentPage = (props) => {
                             <h3 className="text-gray-100 text-4xl">{title}</h3>
 
                             <div className="flex items-center mt-6">
+                                
                                 {
-                                    prices.rent &&
-                                    <button onClick={() => handleCheckout('rent')} className="px-8 py-2 bg-white text-gray-900 text-sm font-medium rounded  hover:text-red-700 focus:outline-none">
-                                        Rent ${prices.rent.amount}
-                                    </button>
-                                }
-                                {
-                                    prices.buy &&
-                                    <button onClick={() => handleCheckout('buy')} className="ml-2 px-8 py-2 bg-white text-gray-900 text-sm font-medium rounded  hover:text-red-700 focus:outline-none">
-                                        Buy ${prices.buy.amount}
-                                    </button>
-                                }
-                                {
-                                    prices.plan &&
-                                    <button onClick={() => handleCheckout('subscribe')} className="ml-2 px-8 py-2 bg-red-700 text-white text-sm font-medium rounded hover:bg-gray-100 hover:text-red-700 focus:outline-none">
-                                        Subscribe ${prices.plan.price.amount}
-                                    </button>
-                                }
-                                {
-                                    prices.available === false
-                                    ? (
-                                      <div className="px-4 py-2 rounded-md bg-gray-500 bg-opacity-50 text-white text-sm  flex items-center">
-                                          <p className="">This content is not available in your country</p>
-                                      </div>
-                                    )
-                                    : null
+                                    prices?.available === true
+                                    ? <PricingButtons prices={prices} />
+                                    : <div className="px-4 py-2 rounded-md bg-gray-500 bg-opacity-50 text-white text-sm flex items-center">
+                                        <p className="">This content is not available in your country</p>
+                                    </div>
                                 }
                             </div>
 
@@ -97,7 +76,7 @@ const ContentPage = (props) => {
                             : <h4 className="mt-2">This content is not available in your country.</h4>
                         }
                     </div> */}
-                    <Json json={content} />
+                    {/* <Json json={content} /> */}
                 </div>
             </div>
         </Fragment>
@@ -105,3 +84,28 @@ const ContentPage = (props) => {
 }
 
 export default ContentPage;
+
+const PricingButtons = ({prices}) => {
+    return (
+        <Fragment>
+            {
+                prices?.rent &&
+                <button onClick={() => handleCheckout('rent')} className="px-8 py-2 bg-white text-gray-900 text-sm font-medium rounded  hover:text-red-700 focus:outline-none">
+                    Rent ${prices.rent.amount}
+                </button>
+            }
+            {
+                prices?.buy &&
+                <button onClick={() => handleCheckout('buy')} className="ml-2 px-8 py-2 bg-white text-gray-900 text-sm font-medium rounded  hover:text-red-700 focus:outline-none">
+                    Buy ${prices.buy.amount}
+                </button>
+            }
+            {
+                prices?.plan &&
+                <button onClick={() => handleCheckout('subscribe')} className="ml-2 px-8 py-2 bg-red-700 text-white text-sm font-medium rounded hover:bg-gray-100 hover:text-red-700 focus:outline-none">
+                    Subscribe ${prices.plan.price.amount}
+                </button>
+            }
+        </Fragment>
+    )
+}

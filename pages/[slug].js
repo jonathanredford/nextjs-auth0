@@ -1,11 +1,12 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Error from "next/error"
 import { groq } from "next-sanity"
 import { useRouter } from "next/router"
 import ContentPage from '../components/ContentPage'
 import { getClient, usePreviewSubscription, urlFor } from "../utils/sanity"
 import { ProxyContext } from '../context/proxy-context'
-import getPrices from '../lib/getPrices'
+import getPrices, { getPlan } from '../lib/getPrices'
+import Json from '../components/Json'
 
 const query = groq`*[_type == "content" && slug.current == $slug]{
     ...,
@@ -21,7 +22,9 @@ const query = groq`*[_type == "content" && slug.current == $slug]{
 
 function ContentPageContainer({ contentData, preview, query }) {
     const [ proxy ] = useContext(ProxyContext)
-    console.log(proxy)
+    const [ activePrices, setActivePrices ] = useState(null)
+
+    
     const router = useRouter();
     if (!router.isFallback && !contentData?.slug) {
         return <Error statusCode={404} />;
@@ -33,6 +36,14 @@ function ContentPageContainer({ contentData, preview, query }) {
         enabled: preview || router.query.preview !== null,
     });
 
+    useEffect(() => {
+        setActivePrices(getPrices(JSON.parse(JSON.stringify(content)), proxy))
+    }, [proxy])
+
+    // const p = getPrices(content, proxy)
+
+    // console.log(p)
+
     const {
         _id,
         title,
@@ -40,19 +51,12 @@ function ContentPageContainer({ contentData, preview, query }) {
         landscapeImage,
         backgroundImage,
         description,
-        plans,
-        body,
-        tags,
-        vendor,
-        categories,
         slug,
     } = content
 
-    const prices = getPrices(content, proxy)
-
     return (
         <>
-            <ContentPage
+            {/* <ContentPage
                 id={_id}
                 title={title}
                 verticalImage={verticalImage}
@@ -64,42 +68,45 @@ function ContentPageContainer({ contentData, preview, query }) {
                 slug={slug?.current}
                 content={content}
                 prices={prices}
-            />
+            /> */}
+            <Json json={content} />
         </>
     );
 }
 
-// export async function getServerSideProps({params, req, res, preview=false}) {
-//     res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=240'); // 300 = 5 minutes
-//     const contentData = await getClient(preview).fetch(query, {
-//         slug: params.slug,
-//     });
-
-//     return {
-//         props: { preview, contentData },
-//     };
-// }
-
-export async function getStaticProps({ params, preview = false }) {
+export async function getServerSideProps({params, req, res, preview=false}) {
+    // res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=240'); // 300 = 5 minutes
     const contentData = await getClient(preview).fetch(query, {
         slug: params.slug,
     });
 
     return {
         props: { preview, contentData },
-        revalidate: 120,
     };
 }
 
-export async function getStaticPaths() {
-    const paths = await getClient().fetch(
-        `*[_type == "content" && defined(slug.current)][].slug.current`
-    );
+// export async function getStaticProps({ params, preview = false }) {
+//     const contentData = await getClient(preview).fetch(query, {
+//         slug: params.slug,
+//     });
 
-    return {
-        paths: paths.map((slug) => ({ params: { slug } })),
-        fallback: true,
-    };
-  }
+//     // console.log(JSON.stringify(contentData.pricing, null, 2))
+
+//     return {
+//         props: { preview, contentData },
+//         revalidate: 120,
+//     };
+// }
+
+// export async function getStaticPaths() {
+//     const paths = await getClient().fetch(
+//         `*[_type == "content" && defined(slug.current)][].slug.current`
+//     );
+
+//     return {
+//         paths: paths.map((slug) => ({ params: { slug } })),
+//         fallback: true,
+//     };
+//   }
 
 export default ContentPageContainer;

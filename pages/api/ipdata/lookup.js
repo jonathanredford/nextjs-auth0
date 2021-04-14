@@ -13,16 +13,16 @@ export default async (req, res) => {
     let cookie
     try {
         cookie = JSON.parse(req.cookies.proxyData)
-        console.log(`proxyData cookie found: `, JSON.stringify(cookie, null, 2))
+        // console.log(`proxyData cookie found: `, JSON.stringify(cookie, null, 2))
     } catch(err) {
-        console.log(`No proxyData cookie found. Looking up ${ip}`)
+        // console.log(`No proxyData cookie found. Looking up ${ip}`)
     }
 
     if(cookie && cookie.ip === ip) {
-        console.log('cookie ip matches ' + ip)
+        // console.log('cookie ip matches ' + ip)
         return res.json(cookie)
     } else {
-        cookie && console.log('cookie ip does not match ' + ip)
+        // cookie && console.log('cookie ip does not match ' + ip)
         if(fields) fields = fields.split(',')
         const result = await new Promise(resolve => {
             ipdata.lookup(ip, field, fields)
