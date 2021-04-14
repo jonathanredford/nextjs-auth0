@@ -26,8 +26,8 @@ export default {
             title: "USD"
         },
         {
-            value: "SGP",
-            title: "SGP"
+            value: "SGD",
+            title: "SGD"
         },
         {
             value: "GBP",
