@@ -95,7 +95,7 @@ export default async (req, res) => {
                 quantity: 1,
             }
             if(taxRate?.active) {
-                lineItem.tax_rates = [taxRate._ref]
+                lineItem.tax_rates = [taxRate._id]
             }
             lineItem.price_data = {
                 currency: currency,
