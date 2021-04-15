@@ -87,22 +87,22 @@ const PricingButtons = ({contentId, prices}) => {
     return (
         <Fragment>
             {
-                prices?.free && <PriceButton contentId={contentId} text={`Free - Add to Library`} />
+                prices?.free && <PriceButton contentId={contentId} type="free" text={`Free - Add to Library`} />
             }
             {
-                prices?.rent && <PriceButton contentId={contentId} text={`Rent ${proxy?.currency?.native}${prices.rent.amount.toFixed(2)}`} />
+                prices?.rent && <PriceButton contentId={contentId} type="rent" text={`Rent ${proxy?.currency?.native}${prices.rent.amount.toFixed(2)}`} />
             }
             {
-                prices?.buy && <PriceButton contentId={contentId} className="ml-2" text={`Buy ${proxy?.currency?.native}${prices.buy.amount.toFixed(2)}`} />
+                prices?.buy && <PriceButton contentId={contentId} type="buy" className="ml-2" text={`Buy ${proxy?.currency?.native}${prices.buy.amount.toFixed(2)}`} />
             }
             {
-                prices?.plan && <PriceButton contentId={contentId} className="ml-2 bg-red-700 text-white hover:bg-gray-100 hover:text-red-700" text={`Subscribe ${proxy?.currency?.native}${prices.plan.price.amount.toFixed(2)}`} />
+                prices?.plan && <PriceButton contentId={contentId} type="subscribe" className="ml-2 bg-red-700 text-white hover:bg-gray-100 hover:text-red-700" text={`Subscribe ${proxy?.currency?.native}${prices.plan.price.amount.toFixed(2)}`} />
             }
         </Fragment>
     )
 }
 
-const PriceButton = ({text, contentId, className}) => {
+const PriceButton = ({text, contentId, type, className}) => {
     const [ isCheckingOut, setIsCheckingOut ] = useState(false)
     const handleCheckout = async (type) => {
         var stripe = Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
@@ -124,7 +124,7 @@ const PriceButton = ({text, contentId, className}) => {
     return (
         <button
             disabled={isCheckingOut ? true : false}
-            onClick={() => handleCheckout('rent')}
+            onClick={() => handleCheckout(type)}
             className={`
                 inline-flex
                 items-center
