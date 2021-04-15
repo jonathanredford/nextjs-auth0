@@ -1,3 +1,5 @@
+import currencies from '../../../lib/data/currencies'
+
 export default {
     name: "currency",
     title: "Currency",
@@ -12,32 +14,7 @@ export default {
     //     })
     // },
     options: {
-        list: [
-        {
-            value: "AUD",
-            title: "AUD"
-        },
-        {
-            value: "NZD",
-            title: "NZD"
-        },
-        {
-            value: "USD",
-            title: "USD"
-        },
-        {
-            value: "SGD",
-            title: "SGD"
-        },
-        {
-            value: "GBP",
-            title: "GBP"
-        },
-        {
-            value: "EUR",
-            title: "EUR"
-        },
-        ],
+        list: currencies,
         layout: "dropdown"
     }
 }

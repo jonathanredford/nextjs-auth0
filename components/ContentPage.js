@@ -100,19 +100,19 @@ const PricingButtons = ({contentId, prices}) => {
             {
                 prices?.rent &&
                 <button onClick={() => handleCheckout('rent')} className="px-8 py-2 bg-white text-gray-900 text-sm font-medium rounded  hover:text-red-700 focus:outline-none">
-                    Rent {proxy?.currency?.native}{prices.rent.amount}
+                    Rent {proxy?.currency?.native}{prices.rent.amount.toFixed()}
                 </button>
             }
             {
                 prices?.buy &&
                 <button onClick={() => handleCheckout('buy')} className="ml-2 px-8 py-2 bg-white text-gray-900 text-sm font-medium rounded  hover:text-red-700 focus:outline-none">
-                    Buy {proxy?.currency?.native}{prices.buy.amount}
+                    Buy {proxy?.currency?.native}{prices.buy.amount.toFixed()}
                 </button>
             }
             {
                 prices?.plan &&
                 <button onClick={() => handleCheckout('subscribe')} className="ml-2 px-8 py-2 bg-red-700 text-white text-sm font-medium rounded hover:bg-gray-100 hover:text-red-700 focus:outline-none">
-                    Subscribe {proxy?.currency?.native}{prices.plan.price.amount}
+                    Subscribe {proxy?.currency?.native}{prices.plan.price.amount.toFixed()}
                 </button>
             }
         </Fragment>
