@@ -25,6 +25,29 @@ export default {
       type: "currency",
     },
     {
+      name: "taxRate",
+      title: "Tax rate",
+      type: "reference",
+      to: [{ type: "taxRate" }],
+      options: {
+        filter: ({document, parent, parentPath}) => {
+          console.log(parent)
+
+          if(!parent.country) {
+            return false
+          } else {
+            return {
+              filter: 'country == $selectedCountry && active == $active',
+              params: {
+                selectedCountry: parent.country,
+                active: true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
       name: "amount",
       type: "number",
       title: "Amount",

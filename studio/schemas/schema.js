@@ -21,6 +21,7 @@ import popup from "./documents/popup";
 import film from './documents/film'
 import content from './documents/content'
 import subscription from './documents/subscription'
+import taxRate from './documents/taxRate'
 
 // Object types
 import blockContent from "./objects/blockContent";
@@ -74,6 +75,7 @@ export default createSchema({
     route,
     siteConfig,
     person,
+    taxRate,
     // When added to this list, object types can be used as
     cta,
     figure,

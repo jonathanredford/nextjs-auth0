@@ -68,10 +68,12 @@ export default async (req, res) => {
         const prices = getPrices(document, proxy)
         
         if(type === 'buy' || type === 'rent') {
-            const { currency, amount } = prices[type]
+            const { currency, amount, taxRate } = prices[type]
             const lineItem = {
                 quantity: 1,
-                tax_rates: ['txr_1HUNI2JUjQ8PcHCfctn6WwSY'],
+            }
+            if(taxRate) {
+                lineItem.tax_rates = [taxRate._ref]
             }
             lineItem.price_data = {
                 currency: currency,
@@ -93,10 +95,12 @@ export default async (req, res) => {
         }
 
         if(type === 'subscribe') {
-            const { currency, amount } = prices.plan.price
+            const { currency, amount, taxRate } = prices.plan.price
             const lineItem = {
                 quantity: 1,
-                tax_rates: ['txr_1HUNI2JUjQ8PcHCfctn6WwSY'],
+            }
+            if(taxRate) {
+                lineItem.tax_rates = [taxRate._ref]
             }
             lineItem.price_data = {
                 currency: currency,
