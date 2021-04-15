@@ -1,10 +1,16 @@
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSession } from 'next-auth/client'
 
 const Navbar = () => {   
     const [menuOpen, setMenuOpen] = useState(false)
     const handleMenu = () => setMenuOpen(!menuOpen) 
+    const [ session, loading ] = useSession()
+
+    useEffect(() => {
+
+    }, [session])
     
     return (
         <header className="relative bg-gradient-to-b from-gray-900 via-gray-900-opacity-50 z-10">
@@ -27,7 +33,7 @@ const Navbar = () => {
                             className="hidden sm:visible sm:flex sm:justify-center sm:items-center"
                         >
                             <div className="flex flex-row items-center">
-                                <NavItems />
+                                <NavItems session={session} loading={loading} />
                             </div>
                         </nav>
                         <div className="flex sm:hidden">
@@ -55,7 +61,7 @@ const Navbar = () => {
                     } sm:hidden sm:flex sm:justify-center sm:items-center`}
                 >
                     <div className="flex flex-col sm:flex-row">
-                        <NavItems />
+                        <NavItems session={session} loading={loading} />
                     </div>
                 </nav>
 
@@ -66,7 +72,9 @@ const Navbar = () => {
 
 export default Navbar
 
-const NavItems = () => {
+const NavItems = ({session, loading}) => {
+    console.log(session)
+    if(loading) return null
     return (
         <Fragment>
             <Link href="/browse">
@@ -74,16 +82,28 @@ const NavItems = () => {
                     Browse
                 </a>
             </Link>
-            <Link href="/signin">
-                <a className="mt-3 text-base text-gray-300 hover:text-gray-100 sm:mx-3 sm:mt-0">
-                    Sign in
-                </a>
-            </Link>
-            <Link href="/signup">
-                <a className="mt-3 text-base text-white sm:mx-3 sm:mt-0 px-4 py-2 border border-transparent rounded-md bg-red-700 hover:bg-red-900">
-                    Sign Up
-                </a>
-            </Link>
+            {
+                session
+                ? <Link href="/api/auth/signout">
+                    <a className="mt-3 text-base text-gray-300 hover:text-gray-100 sm:mx-3 sm:mt-0">
+                        Sign out
+                    </a>
+                </Link>
+                : (
+                    <Fragment>
+                        <Link href="/api/auth/signin">
+                            <a className="mt-3 text-base text-gray-300 hover:text-gray-100 sm:mx-3 sm:mt-0">
+                                Sign in
+                            </a>
+                        </Link>
+                        <Link href="/signup">
+                            <a className="mt-3 text-base text-white sm:mx-3 sm:mt-0 px-4 py-2 border border-transparent rounded-md bg-red-700 hover:bg-red-900">
+                                Sign Up
+                            </a>
+                        </Link>
+                    </Fragment>
+                )
+            }
         </Fragment>
     )
 }

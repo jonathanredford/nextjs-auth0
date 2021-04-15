@@ -5,14 +5,17 @@ import '@stripe/stripe-js'
 // import getIpdata from '../lib/getIpdata'
 // import Cookies from 'js-cookie'
 import { ProxyContextProvider } from '../context/proxy-context'
+import { Provider } from 'next-auth/client'
 
 function MyApp({ Component, pageProps }) {
     // Cookies.set('proxyData', JSON.stringify(pageProps.proxyData), {expires: 1}) // expires in 1 day
     return (
         <ProxyContextProvider>
-            <Layout>
-                <Component {...pageProps} />
-            </Layout>
+            <Provider>
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
+            </Provider>
         </ProxyContextProvider>
     );
 }

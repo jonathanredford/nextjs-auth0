@@ -22,6 +22,9 @@ import film from './documents/film'
 import content from './documents/content'
 import subscription from './documents/subscription'
 import taxRate from './documents/taxRate'
+import account from './documents/account'
+import session from './documents/session'
+import user from './documents/user'
 
 // Object types
 import blockContent from "./objects/blockContent";
@@ -76,6 +79,9 @@ export default createSchema({
     siteConfig,
     person,
     taxRate,
+    account,
+    session,
+    user,
     // When added to this list, object types can be used as
     cta,
     figure,
