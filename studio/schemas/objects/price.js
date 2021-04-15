@@ -31,10 +31,15 @@ export default {
       to: [{ type: "taxRate" }],
       options: {
         filter: ({document, parent, parentPath}) => {
-          console.log(parent)
-
           if(!parent.country) {
             return false
+            return {
+              filter: 'country == "invalid" && active == $active',
+              params: {
+                selectedCountry: parent.country,
+                active: true
+              }
+            }
           } else {
             return {
               filter: 'country == $selectedCountry && active == $active',

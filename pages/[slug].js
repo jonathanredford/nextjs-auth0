@@ -12,7 +12,29 @@ const query = groq`*[_type == "content" && slug.current == $slug]{
     ...,
     "pricing": {
         ...pricing,
-        "plans": pricing.plans[]->
+        "plans": [
+            ...pricing.plans[]->{
+                    ...,
+                    "price": [
+                        ...price[]{
+                            ...,
+                            taxRate->
+                        }
+                    ]
+              }
+        ],
+        "buy": [
+            ...pricing.buy[]{
+                  ...,
+                  taxRate->
+              }
+        ],
+            "rent": [
+            ...pricing.rent[]{
+                  ...,
+                  taxRate->
+              }
+        ]
     },
     "siteConfig": *[_type == "siteConfig"]{
         defaultCurrency,

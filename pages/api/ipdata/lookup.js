@@ -7,7 +7,7 @@ export default async (req, res) => {
     const { query } = req
     let { ip=null, field=null, fields='ip,country_code,currency'} = query
     if(!ip) {
-        ip = req.headers['x-real-ip'] || '180.149.231.84'
+        ip = req.headers['x-real-ip'] || '122.199.1.107'
     }
 
     let cookie

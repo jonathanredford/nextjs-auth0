@@ -30,8 +30,30 @@ export default async (req, res) => {
             ...,
             "pricing": {
                 ...pricing,
-                "plans": pricing.plans[]->
-            }
+                "plans": [
+                    ...pricing.plans[]->{
+                            ...,
+                            "price": [
+                                ...price[]{
+                                    ...,
+                                    taxRate->
+                                }
+                            ]
+                      }
+                ],
+                "buy": [
+                    ...pricing.buy[]{
+                          ...,
+                          taxRate->
+                      }
+                ],
+                    "rent": [
+                    ...pricing.rent[]{
+                          ...,
+                          taxRate->
+                      }
+                ]
+            },
         }[0]`
         await getClient().fetch(groqQuery).then(result => {
             resolve(result)
@@ -72,7 +94,7 @@ export default async (req, res) => {
             const lineItem = {
                 quantity: 1,
             }
-            if(taxRate) {
+            if(taxRate?.active) {
                 lineItem.tax_rates = [taxRate._ref]
             }
             lineItem.price_data = {
@@ -99,7 +121,7 @@ export default async (req, res) => {
             const lineItem = {
                 quantity: 1,
             }
-            if(taxRate) {
+            if(taxRate?.active) {
                 lineItem.tax_rates = [taxRate._ref]
             }
             lineItem.price_data = {
