@@ -82,6 +82,8 @@ const ContentPage = (props) => {
 export default ContentPage;
 
 const PricingButtons = ({contentId, prices}) => {
+    const [ proxy ] = useContext(ProxyContext)
+    console.log(proxy)
     const handleCheckout = async (type) => {
         var stripe = Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 
@@ -98,19 +100,19 @@ const PricingButtons = ({contentId, prices}) => {
             {
                 prices?.rent &&
                 <button onClick={() => handleCheckout('rent')} className="px-8 py-2 bg-white text-gray-900 text-sm font-medium rounded  hover:text-red-700 focus:outline-none">
-                    Rent ${prices.rent.amount}
+                    Rent {proxy?.currency?.native}{prices.rent.amount}
                 </button>
             }
             {
                 prices?.buy &&
                 <button onClick={() => handleCheckout('buy')} className="ml-2 px-8 py-2 bg-white text-gray-900 text-sm font-medium rounded  hover:text-red-700 focus:outline-none">
-                    Buy ${prices.buy.amount}
+                    Buy {proxy?.currency?.native}{prices.buy.amount}
                 </button>
             }
             {
                 prices?.plan &&
                 <button onClick={() => handleCheckout('subscribe')} className="ml-2 px-8 py-2 bg-red-700 text-white text-sm font-medium rounded hover:bg-gray-100 hover:text-red-700 focus:outline-none">
-                    Subscribe ${prices.plan.price.amount}
+                    Subscribe {proxy?.currency?.native}{prices.plan.price.amount}
                 </button>
             }
         </Fragment>
