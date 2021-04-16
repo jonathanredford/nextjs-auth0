@@ -5,6 +5,13 @@ export default {
   title: "Content",
   type: "document",
   icon: MdVideoLibrary,
+  initialValue: {
+    _type: "content",
+    pricing: {
+      _type: "pricing",
+      contentAccess: "restricted"
+    }
+  },
   fields: [
     {
       name: "title",
@@ -27,9 +34,10 @@ export default {
       type: "localeBlockContent",
     },
     {
-      name: "mediaType",
-      title: "Media type",
+      name: "type",
+      title: "Type",
       type: "string",
+      validation: Rule => Rule.required(),
       options: {
         list: [
           {
@@ -37,12 +45,8 @@ export default {
             title: "Movie"
           },
           {
-            value: "episode",
-            title: "Episode"
-          },
-          {
-            value: "trailer",
-            title: "Trailer"
+            value: "series",
+            title: "Series"
           },
           {
             value: "bonus",
@@ -82,86 +86,48 @@ export default {
       name: "verticalImage",
       description: "Recommended size: 2000 x 3000 (2:3)",
       type: "image",
+      validation: Rule => Rule.required(),
     },
     {
       title: "Landscape Image",
       name: "landscapeImage",
       description: "Recommended minimum size: 1920 x 1080 (16:9). Optimum size: 3840 x 2160 (16:9)",
       type: "image",
+      validation: Rule => Rule.required(),
     },
     {
       title: "Background image",
       name: "backgroundImage",
       description: "Recommended minimum size: 1920 x 1080 (16:9). Optimum size: 3840 x 2160 (16:9)",
       type: "image",
+      validation: Rule => Rule.required(),
     },
     {
-      name: "videoThumbnail",
-      title: "Video Thumbnail",
-      description: "Recommended minimum size: 1920 x 1080 (16:9). Optimum size: 3840 x 2160 (16:9)",
-      type: "image",
+      name: "trailers",
+      title: "Trailers",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: { type: "video" },
+          options: {
+            filter: "type == $type && defined(output.playlist)",
+            filterParams: {type: "trailer"}
+          }
+        },
+      ]
+    },
+    {
+      name: "video",
+      title: "Video",
+      type: "reference",
+      to: [{ type: "video" }],
+      validation: Rule => Rule.required(),
       options: {
-        hotspot: true,
-      },
+        filter: 'defined(output.playlist)',
+        // filterParams: {role: 'director'}
+      }
     },
-    {
-      name: "status",
-      title: "Status",
-      type: "string",
-      // readOnly: true,
-    },
-    {
-      name: "sourceJson",
-      title: "Source (JSON)",
-      type: "string",
-      readOnly: true,
-    },
-    // {
-    //   name: "source",
-    //   title: "Source",
-    //   type: "s3Object",
-    //   readOnly: true,
-    // },
-    {
-      name: "transcodeTaskId",
-      title: "Transcode Task ID",
-      type: "string",
-      readOnly: true
-    },
-    {
-      name: "transcodedJson",
-      title: "Transcoded (JSON)",
-      type: "string",
-      readOnly: true,
-    },
-    // {
-    //   name: "playlistUrl",
-    //   title: "Playlist URL",
-    //   type: "string",
-    //   readOnly: true
-    // },
-    // {
-    //   name: "videos",
-    //   title: "Videos",
-    //   type: "array",
-    //   readOnly: true,
-    //   of: [
-    //     {
-    //       type: "video"
-    //     }
-    //   ]
-    // },
-    // {
-    //   name: "images",
-    //   title: "Images",
-    //   type: "array",
-    //   readOnly: true,
-    //   of: [
-    //     {
-    //       type: "videoImage"
-    //     }
-    //   ]
-    // }
   ],
 
   preview: {

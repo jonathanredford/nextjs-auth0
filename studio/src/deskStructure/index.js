@@ -18,12 +18,16 @@ const hiddenDocTypes = (listItem) =>
     "sampleProject",
     "vendor",
     "siteSettings",
+    "social",
     "ad",
     "page",
     // "product",
     "film",
     "route",
     "siteConfig",
+    "taxRate",
+    "account",
+    "session",
   ].includes(listItem.getId());
 
 export default () =>
@@ -49,6 +53,7 @@ export default () =>
                 ),
               S.documentTypeListItem("route").title("Routes"),
               S.documentTypeListItem("page").title("Pages"),
+              // S.documentTypeListItem("social").title("Social"),
             ])
         ),
       ads,

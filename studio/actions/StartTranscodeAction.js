@@ -10,7 +10,7 @@ export function StartTranscodeAction(props) {
     // if( (type !== 'content') || (published?.status !== 'ingested') ) {
     //     return null
     // }
-    if(type !== 'content') {
+    if(type !== 'video') {
         return null
     }
 
@@ -25,7 +25,7 @@ export function StartTranscodeAction(props) {
             onCancel: onComplete,
             onConfirm: async () => {
                 onComplete()
-                const source = JSON.parse(published.sourceJson)
+                const { source } = published
                 try {
                     const response = await fetch('https://kkuqsg0583.execute-api.ap-southeast-2.amazonaws.com/v1/PremieresVideoQueueTranscode', {
                         method: 'POST',
@@ -33,7 +33,7 @@ export function StartTranscodeAction(props) {
                             'x-api-key': 'GCPe3bkMS1alyp9jii5RI1sDhcKLhxo7ha8NReG2'
                         },
                         body: JSON.stringify({
-                            contentId: id,
+                            videoId: id,
                             region: 'ap-southeast-2',
                             bucket: source.bucket,
                             key: source.key

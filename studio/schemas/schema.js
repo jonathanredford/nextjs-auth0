@@ -25,6 +25,7 @@ import taxRate from './documents/taxRate'
 import account from './documents/account'
 import session from './documents/session'
 import user from './documents/user'
+import video from './documents/video'
 
 // Object types
 import blockContent from "./objects/blockContent";
@@ -38,9 +39,8 @@ import contactInfo from "./objects/contactInfo";
 import price from './objects/price'
 import geoRules from './objects/geoRules'
 import country from './objects/country'
-import video from './objects/video'
 import videoImage from './objects/videoImage'
-import s3Object from './objects/s3Object'
+import contentSource from './objects/contentSource'
 import pricing from './objects/pricing'
 import currency from './objects/currency'
 
@@ -82,6 +82,7 @@ export default createSchema({
     account,
     session,
     user,
+    video,
     // When added to this list, object types can be used as
     cta,
     figure,
@@ -103,8 +104,7 @@ export default createSchema({
     currency,
     geoRules,
     country,
-    video,
     videoImage,
-    s3Object,
+    contentSource,
   ]),
 });

@@ -1,6 +1,6 @@
 export default {
-  name: "s3Object",
-  title: "S3 Object",
+  name: "contentSource",
+  title: "Content Source",
   type: "object",
   fields: [
     {

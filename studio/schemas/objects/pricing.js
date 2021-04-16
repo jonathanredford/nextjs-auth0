@@ -24,7 +24,6 @@ export default {
       name: "contentAccess",
       title: "Content Access",
       type: "string",
-      validation: Rule => Rule.required(),
       options: {
         list: [
           {
@@ -37,9 +36,9 @@ export default {
           },
         ],
         layout: "radio",
-        direction: "horizontal"
+        direction: "horizontal",
       },
-      description: "Choose to offer this content for free or require access"
+      description: "Choose to offer this content for free or require access",
     },
     {
       name: "plans",
