@@ -4,6 +4,7 @@ export default {
   name: "video",
   title: "Video",
   type: "document",
+  liveEdit: true,
   icon: MdPlayCircleOutline,
   fields: [
     {
@@ -89,6 +90,11 @@ export default {
         {
           title: "Playlist",
           name: "playlist",
+          type: "string",
+        },
+        {
+          title: "Images",
+          name: "images",
           type: "string",
         },
         {

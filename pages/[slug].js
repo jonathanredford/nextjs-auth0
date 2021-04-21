@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/client'
 import Error from "next/error"
 import { groq } from "next-sanity"
 import { useRouter } from "next/router"
@@ -44,7 +45,9 @@ const query = groq`*[_type == "content" && slug.current == $slug]{
 
 function ContentPageContainer({ contentData, preview, query }) {
     const [ proxy ] = useContext(ProxyContext)
+    const [ session, loading ] = useSession()
     const [ prices, setPrices ] = useState(null)
+    const [ access, setAccess ] = useState(false)
 
     
     const router = useRouter();
@@ -58,14 +61,6 @@ function ContentPageContainer({ contentData, preview, query }) {
         enabled: preview || router.query.preview !== null,
     });
 
-    useEffect(() => {
-        setPrices(getPrices(JSON.parse(JSON.stringify(content)), proxy))
-    }, [proxy])
-
-    // const p = getPrices(content, proxy)
-
-    // console.log(p)
-
     const {
         _id,
         title,
@@ -75,6 +70,24 @@ function ContentPageContainer({ contentData, preview, query }) {
         description,
         slug,
     } = content
+
+    useEffect(() => {
+        setPrices(getPrices(JSON.parse(JSON.stringify(content)), proxy))
+    }, [proxy])
+
+    useEffect(() => {
+        getAccess(content, session)
+    }, [session])
+
+    const getAccess = (content, session) => {
+        const library = session?.user?.access?.library
+        if(!library) return
+        const libraryContent = library.find(item => item.content._id === content._id)
+        if(libraryContent) {
+            console.log(libraryContent)
+            setAccess(libraryContent)
+        }
+    }
 
     return (
         <>
@@ -90,6 +103,7 @@ function ContentPageContainer({ contentData, preview, query }) {
                 slug={slug?.current}
                 content={content}
                 prices={prices}
+                access={access}
             />
             {/* <Json json={content} /> */}
         </>

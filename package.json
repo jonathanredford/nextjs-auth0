@@ -32,6 +32,7 @@
     "postcss": "^8.2.10",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-icons": "^4.2.0",
     "stripe": "^8.142.0"
   },
   "devDependencies": {

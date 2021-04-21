@@ -2,6 +2,7 @@ import { useState, Fragment, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSession } from 'next-auth/client'
+import { BsPeopleCircle } from 'react-icons/bs'
 
 const Navbar = () => {   
     const [menuOpen, setMenuOpen] = useState(false)
@@ -73,8 +74,14 @@ const Navbar = () => {
 export default Navbar
 
 const NavItems = ({session, loading}) => {
-    console.log(session)
-    if(loading) return null
+    // console.log(session, loading)
+    if(loading) return (
+        <Fragment>
+            <div className="animate-pulse rounded-md mt-3 w-24 h-6 bg-gray-300 bg-opacity-25 sm:mx-1 sm:mt-0" />
+            <div className="animate-pulse rounded-md mt-3 w-24 h-6 bg-gray-300 bg-opacity-25 sm:mx-1 sm:mt-0" />
+            <div className="animate-pulse rounded-full mt-3 w-6 h-6 bg-gray-300 bg-opacity-25 sm:mx-1 sm:mt-0" />
+        </Fragment>
+    )
     return (
         <Fragment>
             <Link href="/browse">
@@ -84,11 +91,18 @@ const NavItems = ({session, loading}) => {
             </Link>
             {
                 session
-                ? <Link href="/api/auth/signout">
-                    <a className="mt-3 text-base text-gray-300 hover:text-gray-100 sm:mx-3 sm:mt-0">
-                        Sign out
-                    </a>
-                </Link>
+                ? <Fragment>
+                    <Link href="/api/auth/signout">
+                        <a className="mt-3 text-base text-gray-300 hover:text-gray-100 sm:mx-3 sm:mt-0">
+                            Sign out
+                        </a>
+                    </Link>
+                    <Link href="/me">
+                        <a className="text-gray-300 hover:text-gray-100 sm:mx-3 sm:mt-0">
+                            <BsPeopleCircle size={24} />
+                        </a>
+                    </Link>
+                </Fragment>
                 : (
                     <Fragment>
                         <Link href="/api/auth/signin">

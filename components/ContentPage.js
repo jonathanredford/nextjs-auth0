@@ -1,15 +1,16 @@
 import { Fragment, useState, useContext } from 'react'
+import Link from 'next/link'
 import { urlFor, PortableText, getClient } from "../utils/sanity"
 import Json from "../components/Json"
 import { ProxyContext } from '../context/proxy-context'
+import { useSession } from 'next-auth/client'
+import { BsPlayFill } from 'react-icons/bs'
 
 const ContentPage = (props) => {
     const [ proxy ] = useContext(ProxyContext)
     const [count, setCount] = useState(1)
     const handleCount = (value) => !(count === 0 && value === -1) ? setCount(count + value) : count
-    const { id, title, defaultProductVariant, verticalImage, mainImage, landscapeImage, backgroundImage, body, content, prices } = props;
-
-    console.log(prices)
+    const { id, title, defaultProductVariant, verticalImage, mainImage, landscapeImage, backgroundImage, body, content, prices, access } = props;
 
     return (
         <Fragment>
@@ -43,7 +44,15 @@ const ContentPage = (props) => {
                                     !proxy.loading
                                     ? (
                                         prices?.available === true
-                                        ? <PricingButtons contentId={id} prices={prices} />
+                                        ? (
+                                            access
+                                            ? <Link href={`/watch/${access.content._id}`}>
+                                                <a className=" inline-flex items-center px-4 py-2 bg-white text-sm font-medium rounded hover:text-red-700 focus:outline-none transition ease-in-out duration-150">
+                                                    <BsPlayFill className="mr-1" size={20} /> Play
+                                                </a>
+                                            </Link>
+                                            : <PricingButtons contentId={id} prices={prices} />
+                                        )
                                         : <div className="px-4 py-2 rounded-md bg-gray-500 bg-opacity-50 text-white text-sm flex items-center">
                                             <p className="">This content is not available in your country</p>
                                         </div>
