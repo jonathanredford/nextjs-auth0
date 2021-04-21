@@ -5,26 +5,39 @@ import { useSession } from 'next-auth/client'
 import LibraryPage from '../../components/LibraryPage'
 import { useEffect, useState } from 'react'
 import NoLayout from '../../components/NoLayout'
+import Link from 'next/link'
+import { BsArrowLeft } from 'react-icons/bs'
 
-function WatchPageContainer({ contentsData, preview }) {
+function WatchPageContainer({ preview }) {
     const [ session, loading ] = useSession()
-    const [ videos, setVideos ] = useState(null)
-    // console.log(session)
+    const [ content, setContent ] = useState(null)
+    const [ isShown, setIsShown ] = useState(false)
     const router = useRouter();
 
     useEffect(() => {
         if(router.query.id) {
-            fetchVideos(router.query.id)
+            fetchContent(router.query.id)
         }
-        
+        if(!window?.timeoutHandler) {
+            window.timeoutHandler = setTimeout(() => {
+                setIsShown(false)
+            }, 4000)
+        }
     }, [router])
 
-    const fetchVideos = async (contentId) => {
+    const hover = () => {
+        clearTimeout(window.timeoutHandler)
+        setIsShown(true)
+        window.timeoutHandler = setTimeout(() => {
+            setIsShown(false)
+        }, 2000)
+    }
+
+    const fetchContent = async (contentId) => {
         await fetch(`/api/content/${contentId}/videos`)
             .then(res => res.json())
             .then(data => {
-                console.log(data)
-                setVideos(data)
+                setContent(data)
                 initPlayer(data)
             })
             .catch(err => {
@@ -33,9 +46,10 @@ function WatchPageContainer({ contentsData, preview }) {
             })
     }
 
-    const initPlayer = (videos) => {
+
+    const initPlayer = (content) => {
         jwplayer('player').setup({
-            playlist: videos.map(video => ({
+            playlist: content.videos.map(video => ({
                 file: video.playlist,
                 image: urlFor(video.thumbnail).auto("format").fit("crop").width(1920).quality(80).url(),
                 title: video.title,
@@ -54,7 +68,7 @@ function WatchPageContainer({ contentsData, preview }) {
     }
 
 
-    if(loading || !videos) {
+    if(loading || !content) {
         return (
             <div className="absolute inset-0 flex items-center justify-center">
                 <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -65,7 +79,16 @@ function WatchPageContainer({ contentsData, preview }) {
         )
     }
 
-    return <div id="player" />
+    return (
+        <div onMouseMove={() => hover()}>
+            <div id="player" />
+            <Link href={`/${content.slug.current}`}>
+                <a className={`px-4 py-1 flex items-center text-white text-2xl rounded-md hover:bg-gray-100 hover:text-gray-700 transition-bg  absolute top-6 left-12 transition duration-200 ease transition-opacity ${isShown ? 'opacity-100' : 'opacity-0'}`}>
+                   <BsArrowLeft size={48} className="mr-2" /> Back
+                </a>
+            </Link>
+        </div>
+    )
 }
 
 WatchPageContainer.Layout = NoLayout

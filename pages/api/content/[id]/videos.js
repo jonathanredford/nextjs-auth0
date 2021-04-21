@@ -3,6 +3,8 @@ import { groq } from "next-sanity"
 import { getClient } from "../../../../utils/sanity"
 
 const groqQuery = groq`*[_id == $id]{
+    slug,
+    title,
     videos[]->{
         _id,
         _type,
@@ -12,7 +14,7 @@ const groqQuery = groq`*[_id == $id]{
 		"thumbnails": output.thumbnails,
         thumbnail
     }
-}[0].videos`
+}[0]`
 
 export default async (req, res) => {
     const session = await getSession({ req })
@@ -22,10 +24,10 @@ export default async (req, res) => {
     const { user } = session
 
     if(user?.access?.contentIds?.indexOf(query.id) !== -1) {
-        const videoData = await getClient().fetch(groqQuery, {
+        const contentData = await getClient().fetch(groqQuery, {
             id: query.id,
         });
-        return res.json(JSON.stringify(videoData, null, 2))
+        return res.json(JSON.stringify(contentData, null, 2))
     } else {
         return res.status(401).end()
     }
