@@ -43,7 +43,7 @@ const ContentPage = (props) => {
                                 {
                                     !proxy.loading
                                     ? (
-                                        prices?.available === true
+                                        prices?.available === true || access
                                         ? (
                                             access
                                             ? <Link href={`/watch/${access.content._id}`}>

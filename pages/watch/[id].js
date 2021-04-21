@@ -7,10 +7,12 @@ import { useEffect, useState } from 'react'
 import NoLayout from '../../components/NoLayout'
 import Link from 'next/link'
 import { BsArrowLeft } from 'react-icons/bs'
+import { Fragment } from 'react'
 
 function WatchPageContainer({ preview }) {
     const [ session, loading ] = useSession()
     const [ content, setContent ] = useState(null)
+    const [ error, setError ] = useState(null)
     const [ isShown, setIsShown ] = useState(false)
     const router = useRouter();
 
@@ -41,7 +43,7 @@ function WatchPageContainer({ preview }) {
                 initPlayer(data)
             })
             .catch(err => {
-                // console.log('ERROR: ', err)
+                console.log('ERROR: ', err)
                 router.push('/')
             })
     }
@@ -65,6 +67,10 @@ function WatchPageContainer({ preview }) {
             height: '100vh',
             stretching: 'uniform'
         });
+        jwplayer('player').on('setupError', (err) => {
+            console.log(err)
+            setError(err)
+        })
     }
 
 
@@ -79,16 +85,37 @@ function WatchPageContainer({ preview }) {
         )
     }
 
-    return (
-        <div onMouseMove={() => hover()}>
-            <div id="player" />
-            <Link href={`/${content.slug.current}`}>
-                <a className={`px-4 py-1 flex items-center text-white text-2xl rounded-md hover:bg-gray-100 hover:text-gray-700 transition-bg  absolute top-6 left-12 transition duration-200 ease transition-opacity ${isShown ? 'opacity-100' : 'opacity-0'}`}>
-                   <BsArrowLeft size={48} className="mr-2" /> Back
-                </a>
-            </Link>
-        </div>
-    )
+    if(content) {
+        return (
+            <Fragment>
+                <div onMouseMove={() => hover()}>
+                    <div id="player" />
+                    <Link href={`/${content.slug.current}`}>
+                        <a className={`px-4 py-1 flex items-center text-white text-2xl rounded-md hover:bg-gray-100 hover:text-gray-700 transition-bg  absolute top-6 left-12 transition duration-200 ease transition-opacity ${isShown ? 'opacity-100' : 'opacity-0'}`}>
+                        <BsArrowLeft size={48} className="mr-2" /> Back
+                        </a>
+                    </Link>
+                </div>
+                {
+                    error && <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <div>
+                            <h1 className="text-white">Playback Error: {error.message}</h1>
+                            <p className="text-white block">Error code {error.code}</p>
+                        </div>
+                        <div className="flex justify-center mt-12">
+                            <Link href={`/${content.slug.current}`}>
+                                <a className="px-4 py-2 rounded-md text-gray-700 bg-white">
+                                    Go Back
+                                </a>
+                            </Link>
+                        </div>
+                    </div>
+                }
+            </Fragment>
+        )
+    }
+
+    return null
 }
 
 WatchPageContainer.Layout = NoLayout
