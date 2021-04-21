@@ -3,8 +3,11 @@ import { groq } from "next-sanity"
 import { getClient, usePreviewSubscription, urlFor } from "../../utils/sanity"
 import getIpdata from '../../lib/getIpdata'
 import getPrices from '../../lib/getPrices'
+import { getSession } from 'next-auth/client'
 
 export default async (req, res) => {
+    const session = await getSession({ req })
+    const { user } = session
     const { query } = req
     const { callback_url=process.env.APP_URL, type, id} = query
 
@@ -85,11 +88,16 @@ export default async (req, res) => {
             payment_method_types: ['card'],
             success_url: callback_url + '?checkout=success',
             cancel_url: callback_url + '?checkout=cancel',
-            line_items: []
+            line_items: [],
+            metadata: {
+                contentId: _id,
+                userId: user._id,
+            }
         }
         const prices = getPrices(document, proxy)
         
         if(type === 'buy' || type === 'rent') {
+    
             const { currency, amount, taxRate } = prices[type]
             const lineItem = {
                 quantity: 1,
@@ -114,6 +122,7 @@ export default async (req, res) => {
                 },
             }
             sessionOptions.line_items.push(lineItem)
+            sessionOptions.metadata.type = type
         }
 
         if(type === 'subscribe') {

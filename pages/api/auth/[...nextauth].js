@@ -22,6 +22,7 @@ export default NextAuth({
         async session(session, user) {
             console.log('SESSION CALLBACK', session, user)
              if(session.user?.email) {
+                 session.user._id = user._id
                  session.user.access = user.access
              }
             return session
