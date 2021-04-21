@@ -58,7 +58,7 @@ export default {
       type: "text",
     },
     {
-      name: "image",
+      name: "thumbnail",
       title: "Thumbnail",
       description: "Recommended minimum size: 1920 x 1080 (16:9). Optimum size: 3840 x 2160 (16:9)",
       type: "image",
@@ -93,8 +93,8 @@ export default {
           type: "string",
         },
         {
-          title: "Images",
-          name: "images",
+          title: "Thumbnails",
+          name: "thumbnails",
           type: "string",
         },
         {

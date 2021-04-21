@@ -1,13 +1,14 @@
 import Header from './Header'
 import Footer from './Footer'
+import { Fragment } from 'react';
 
 const Layout = ({ children }) => {
     return (
-        <div className="bg-gray-900 min-h-screen">
+        <Fragment>
             <Header />
             <main className="my-8">{children}</main>
             <Footer />
-        </div>
+        </Fragment>
     );
 }
 

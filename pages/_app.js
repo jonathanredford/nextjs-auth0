@@ -8,13 +8,14 @@ import { ProxyContextProvider } from '../context/proxy-context'
 import { Provider } from 'next-auth/client'
 
 function MyApp({ Component, pageProps }) {
+    const ActiveLayout = Component.Layout || Layout
     // Cookies.set('proxyData', JSON.stringify(pageProps.proxyData), {expires: 1}) // expires in 1 day
     return (
         <ProxyContextProvider>
             <Provider>
-                <Layout>
+                <ActiveLayout>
                     <Component {...pageProps} />
-                </Layout>
+                </ActiveLayout>
             </Provider>
         </ProxyContextProvider>
     );

@@ -118,15 +118,20 @@ export default {
       ]
     },
     {
-      name: "video",
-      title: "Video",
-      type: "reference",
-      to: [{ type: "video" }],
-      validation: Rule => Rule.required(),
-      options: {
-        filter: 'defined(output.playlist)',
-        // filterParams: {role: 'director'}
-      }
+      name: "videos",
+      title: "Videos",
+      type: "array",
+      of: [
+        {
+          type: "reference",
+          to: { type: "video" },
+          options: {
+            filter: 'defined(output.playlist)',
+            // filterParams: {role: 'director'}
+          }
+        },
+      ],
+      validation: Rule => Rule.required().unique(),
     },
   ],
 
