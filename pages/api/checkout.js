@@ -95,7 +95,6 @@ export default async (req, res) => {
             }
         }
         const prices = getPrices(document, proxy)
-        console.log(JSON.stringify(prices,null,2))
         
         if(type === 'buy' || type === 'rent') {
     
@@ -157,8 +156,6 @@ export default async (req, res) => {
             sessionOptions.line_items.push(lineItem)
         }
 
-
-        console.log(JSON.stringify(sessionOptions,null,2))
         let session
         try {
             if(sessionOptions.line_items.length) {
