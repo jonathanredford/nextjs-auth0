@@ -29,8 +29,6 @@ export default async (req, res) => {
             contentAccess.expires = date
         }
 
-        console.log(contentAccess)
-
         await sanityClient
             .patch(session.user._id)
             .unset([`access.library[_key == "${contentAccess._key}"]`])

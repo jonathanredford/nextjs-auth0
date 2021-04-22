@@ -134,15 +134,35 @@ export default {
                                     name: "rentStartWindow",
                                     title: "Rental start duration",
                                     type: "number",
-                                    description: "Only valid for rentals. The number of days a customer has to start watching a rental. If not set, the default values will be used.",
-                                    validation: Rule => Rule.min(1).max(90)
+                                    description: "Only valid for rentals. The number of days a customer has to start watching a rental.",
+                                    validation: Rule => Rule.custom((days, context) => {
+                                        if(context.parent.type === 'rent') {
+                                            if(parseInt(days) < 1 || parseInt(days) > 365) {
+                                                return 'Value must be between 1 and 365 (inclusive)'
+                                            }
+                                            if(!days) {
+                                                return 'A duration must be set for rentals'
+                                            }
+                                        }
+                                        return true
+                                    })
                                 },
                                 {
                                     name: "rentWatchWindow",
                                     title: "Rental watch duration",
                                     type: "number",
-                                    description: "Only valid for rentals. The number of days a customer has to finish a rental once started. If not set, the default values will be used.",
-                                    validation: Rule => Rule.min(1).max(90)
+                                    description: "Only valid for rentals. The number of days a customer has to finish a rental once started.",
+                                    validation: Rule => Rule.custom((days, context) => {
+                                        if(context.parent.type === 'rent') {
+                                            if(parseInt(days) < 1 || parseInt(days) > 365) {
+                                                return 'Value must be between 1 and 365 (inclusive)'
+                                            }
+                                            if(!days) {
+                                                return 'A duration must be set for rentals'
+                                            }
+                                        }
+                                        return true
+                                    })
                                 },
                                 {
                                     name: "expires",
@@ -150,7 +170,7 @@ export default {
                                     type: "datetime",
                                     description: "Only applicable for Rentals. If no expiry is set, the content will be available in the users library forever. However, the rental window will begin once they play the content for the first time.",
                                     validation: Rule => Rule.custom((expires, context) => {
-                                        if(context.parent.started === true && !expires) {
+                                        if(context.parent.started === true && context.parent.type === 'rent' && !expires) {
                                             return "An expiry date must be set if started is true"
                                         }
                                         return true

@@ -6,6 +6,8 @@ import isRentalExpired from '../../../../lib/isRentalExpired'
 const groqQuery = groq`*[_id == $id]{
     slug,
     title,
+    createdAt,
+    updatedAt,
     videos[]->{
         _id,
         _type,
@@ -28,7 +30,10 @@ export default async (req, res) => {
         const contentAccessIndex = user.access.contentIds.indexOf(query.id)
         const contentAccess = user.access.library[contentAccessIndex]
 
-        if(contentAccess.started === true && !isRentalExpired(contentAccess.expires)) {
+        let watchWindowExpiry = new Date(contentAccess.createdAt)
+        watchWindowExpiry.setDate(watchWindowExpiry.getDate() + watchWindowExpiry.rentalStartWindow)
+
+        if(contentAccess.started === true && !isRentalExpired(contentAccess.expires) || !isRentalExpired(watchWindowExpiry)) {
             const contentData = await getClient().fetch(groqQuery, {
                 id: query.id,
             });

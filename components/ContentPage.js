@@ -17,7 +17,7 @@ const ContentPage = (props) => {
     console.log(access)
     const handlePlay = () => {
         const path = `/watch/${access.content.slug.current}/${access.content._id}`
-        if(!access.expires) {
+        if(access.type === 'rent' && !access.expires) {
             if(confirm('Once you start watching, you have 3 days to finish')) {
                 fetch(`/api/content/${id}/start`)
                 .then(res => {
