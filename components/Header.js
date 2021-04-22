@@ -15,7 +15,7 @@ const Navbar = () => {
     
     return (
         <header className="relative bg-gradient-to-b from-gray-900 via-gray-900-opacity-50 z-10">
-            <div className="container mx-auto px-6 py-4">
+            <div className="lg:container mx-auto px-6 py-4">
                 <div className="flex items-center justify-between">
                     
                     <div className="w-full">

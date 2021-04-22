@@ -6,6 +6,7 @@ import '@stripe/stripe-js'
 // import Cookies from 'js-cookie'
 import { ProxyContextProvider } from '../context/proxy-context'
 import { Provider } from 'next-auth/client'
+import ToastProvider from '../components/Toast'
 
 function MyApp({ Component, pageProps }) {
     const ActiveLayout = Component.Layout || Layout
@@ -17,6 +18,7 @@ function MyApp({ Component, pageProps }) {
                     <Component {...pageProps} />
                 </ActiveLayout>
             </Provider>
+            <ToastProvider />
         </ProxyContextProvider>
     );
 }
