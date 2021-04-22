@@ -73,5 +73,19 @@ export default {
         }
       ],
     },
+    {
+        name: "rentStartWindow",
+        title: "Rental start duration",
+        type: "number",
+        description: "Only valid for rentals. The number of days a customer has to start watching a rental. If not set, the default values will be used.",
+        validation: Rule => Rule.min(1).max(90)
+    },
+    {
+        name: "rentWatchWindow",
+        title: "Rental watch duration",
+        type: "number",
+        description: "Only valid for rentals. The number of days a customer has to finish a rental once started. If not set, the default values will be used.",
+        validation: Rule => Rule.min(1).max(90)
+    },
   ],
 };

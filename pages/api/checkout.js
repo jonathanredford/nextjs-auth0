@@ -57,6 +57,12 @@ export default async (req, res) => {
                       }
                 ]
             },
+            "siteConfig": *[_type == "siteConfig"]{
+                defaultCurrency,
+                defaultCountry,
+                rentStartWindow,
+                rentWatchWindow
+            }[0]
         }[0]`
         await getClient().fetch(groqQuery).then(result => {
             resolve(result)
@@ -81,7 +87,7 @@ export default async (req, res) => {
     // }, null, 2))
 
     if(document && proxy) {
-        const { _id, _type, title, slug, verticalImage } = document
+        const { _id, _type, title, slug, verticalImage, siteConfig, pricing } = document
         const mode = query.type === 'subscribe' ? 'subscription' : 'payment'
         const sessionOptions = {
             mode: mode,
@@ -123,6 +129,11 @@ export default async (req, res) => {
             }
             sessionOptions.line_items.push(lineItem)
             sessionOptions.metadata.type = type
+
+            if(type === 'rent') {
+                sessionOptions.metadata.rentStartWindow = pricing.rentStartWindow || siteConfig.rentStartWindow
+                sessionOptions.metadata.rentWatchWindow = pricing.rentWatchWindow || siteConfig.rentWatchWindow
+            }
         }
 
         if(type === 'subscribe') {

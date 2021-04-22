@@ -8,6 +8,7 @@ import { getClient, usePreviewSubscription, urlFor } from "../utils/sanity"
 import { ProxyContext } from '../context/proxy-context'
 import getPrices, { getPlan } from '../lib/getPrices'
 import Json from '../components/Json'
+import isRentalExpired from '../lib/isRentalExpired'
 
 const query = groq`*[_type == "content" && slug.current == $slug]{
     ...,
@@ -85,7 +86,10 @@ function ContentPageContainer({ contentData, preview, query }) {
         const libraryContent = library.find(item => item.content._id === content._id)
         if(libraryContent) {
             console.log(libraryContent)
-            setAccess(libraryContent)
+            console.log(isRentalExpired(libraryContent.expires))
+            if(!isRentalExpired(libraryContent.expires)) {
+                setAccess(libraryContent)
+            }
         }
     }
 

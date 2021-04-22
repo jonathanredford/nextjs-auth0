@@ -17,17 +17,6 @@ export default {
       description: "The main site url. Used to create canonical url",
     },
     {
-      name: "frontpage",
-      type: "reference",
-      description: "Choose page to be the frontpage",
-      to: { type: "page" },
-    },
-    {
-      title: "Site language",
-      name: "lang",
-      type: "string",
-    },
-    {
       title: "Default currency",
       name: "defaultCurrency",
       type: "currency",
@@ -38,6 +27,20 @@ export default {
       name: "defaultCountry",
       type: "country",
       description: "If the visitor's country is not able to be determined, the default country will be used as a fallback  (optional)"
+    },
+    {
+      name: "rentStartWindow",
+      title: "Rental start duration",
+      type: "number",
+      description: "The number of days a customer has to start watching a rental",
+      validation: Rule => Rule.required().min(1).max(90)
+    },
+    {
+      name: "rentWatchWindow",
+      title: "Rental watch duration",
+      type: "number",
+      description: "The number of days a customer has to finish a rental once started",
+      validation: Rule => Rule.required().min(1).max(90)
     },
     {
       title: "Brand logo",
@@ -58,42 +61,42 @@ export default {
         },
       ],
     },
-    {
-      title: "Main navigation",
-      name: "mainNavigation",
-      description: "Select pages for the top menu",
-      validation: (Rule) => [
-        Rule.max(5).warning("Are you sure you want more than 5 items?"),
-        Rule.unique().error("You have duplicate menu items"),
-      ],
-      type: "array",
-      of: [
-        {
-          type: "reference",
-          to: [{ type: "route" }],
-        },
-      ],
-    },
-    {
-      title: "Footer navigation items",
-      name: "footerNavigation",
-      type: "array",
-      validation: (Rule) => [
-        Rule.max(10).warning("Are you sure you want more than 10 items?"),
-        Rule.unique().error("You have duplicate menu items"),
-      ],
-      fieldset: "footer",
-      of: [
-        {
-          type: "reference",
-          to: [{ type: "route" }],
-        },
-      ],
-    },
-    {
-      name: "footerText",
-      type: "simplePortableText",
-      fieldset: "footer",
-    },
+    // {
+    //   title: "Main navigation",
+    //   name: "mainNavigation",
+    //   description: "Select pages for the top menu",
+    //   validation: (Rule) => [
+    //     Rule.max(5).warning("Are you sure you want more than 5 items?"),
+    //     Rule.unique().error("You have duplicate menu items"),
+    //   ],
+    //   type: "array",
+    //   of: [
+    //     {
+    //       type: "reference",
+    //       to: [{ type: "route" }],
+    //     },
+    //   ],
+    // },
+    // {
+    //   title: "Footer navigation items",
+    //   name: "footerNavigation",
+    //   type: "array",
+    //   validation: (Rule) => [
+    //     Rule.max(10).warning("Are you sure you want more than 10 items?"),
+    //     Rule.unique().error("You have duplicate menu items"),
+    //   ],
+    //   fieldset: "footer",
+    //   of: [
+    //     {
+    //       type: "reference",
+    //       to: [{ type: "route" }],
+    //     },
+    //   ],
+    // },
+    // {
+    //   name: "footerText",
+    //   type: "simplePortableText",
+    //   fieldset: "footer",
+    // },
   ],
 };

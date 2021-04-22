@@ -1,10 +1,10 @@
 import Error from 'next/error'
 import { useRouter } from 'next/router'
-import { getClient, usePreviewSubscription, urlFor } from '../../utils/sanity'
+import { getClient, usePreviewSubscription, urlFor } from '../../../utils/sanity'
 import { useSession } from 'next-auth/client'
-import LibraryPage from '../../components/LibraryPage'
+import LibraryPage from '../../../components/LibraryPage'
 import { useEffect, useState } from 'react'
-import NoLayout from '../../components/NoLayout'
+import NoLayout from '../../../components/NoLayout'
 import Link from 'next/link'
 import { BsArrowLeft } from 'react-icons/bs'
 import { Fragment } from 'react'
@@ -44,7 +44,7 @@ function WatchPageContainer({ preview }) {
             })
             .catch(err => {
                 console.log('ERROR: ', err)
-                router.push('/')
+                router.push(`/${router.query.slug}`)
             })
     }
 

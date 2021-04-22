@@ -20,16 +20,17 @@ export default NextAuth({
             return baseUrl
         },
         async session(session, user) {
-            console.log('SESSION CALLBACK', session, user)
+            // console.log('SESSION CALLBACK', session, user)
              if(session.user?.email) {
                  session.user._id = user._id
                  session.user.access = user.access
              }
+            //  console.log(session)
             return session
         },
         async jwt(token, user, account, profile, isNewUser) {
             return token
         }
     },
-    debug: true
+    debug: false
 })

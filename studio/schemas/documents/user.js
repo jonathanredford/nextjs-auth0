@@ -6,6 +6,7 @@ export default {
     name: "user",
     type: "document",
     title: "User",
+    liveEdit: true,
     icon: MdPerson,
     fields: [
         {
@@ -50,6 +51,29 @@ export default {
                     name: "library",
                     type: "array",
                     title: "Library",
+                    validation: Rule => Rule.custom(array => {
+                        let hasDuplicate = false
+                        const contentIds = []
+                        const duplicates = []
+                        for(var i = 0; i < array.length; i++) {
+                            const id = array[i].content._ref
+                            if(contentIds.indexOf(id) === -1) {
+                                contentIds.push(id)
+                            } else {
+                                duplicates.push(array[i])
+                                hasDuplicate = true
+                                i = array.length
+                            }
+                        }
+                        if(hasDuplicate) {
+                            const duplicatePaths = duplicates.map((obj, index) => [{_key: obj._key}] || [index])
+                            return {
+                                message: 'Cannot contain duplicates',
+                                paths: duplicatePaths
+                            }
+                        }
+                        return true
+                    }),
                     of: [
                         // {
                         //     title: "Content",
@@ -107,6 +131,20 @@ export default {
                                     }
                                 },
                                 {
+                                    name: "rentStartWindow",
+                                    title: "Rental start duration",
+                                    type: "number",
+                                    description: "Only valid for rentals. The number of days a customer has to start watching a rental. If not set, the default values will be used.",
+                                    validation: Rule => Rule.min(1).max(90)
+                                },
+                                {
+                                    name: "rentWatchWindow",
+                                    title: "Rental watch duration",
+                                    type: "number",
+                                    description: "Only valid for rentals. The number of days a customer has to finish a rental once started. If not set, the default values will be used.",
+                                    validation: Rule => Rule.min(1).max(90)
+                                },
+                                {
                                     name: "expires",
                                     title: "Expires",
                                     type: "datetime",
@@ -122,7 +160,7 @@ export default {
                                     name: "started",
                                     title: "Started",
                                     type: "boolean",
-                                    readOnly: true
+                                    // readOnly: true
                                 }
                             ]
                         }

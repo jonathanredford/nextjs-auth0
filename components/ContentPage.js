@@ -1,16 +1,35 @@
 import { Fragment, useState, useContext } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { urlFor, PortableText, getClient } from "../utils/sanity"
 import Json from "../components/Json"
 import { ProxyContext } from '../context/proxy-context'
 import { useSession } from 'next-auth/client'
 import { BsPlayFill } from 'react-icons/bs'
+import { Router } from 'next/dist/client/router'
 
 const ContentPage = (props) => {
     const [ proxy ] = useContext(ProxyContext)
     const [count, setCount] = useState(1)
     const handleCount = (value) => !(count === 0 && value === -1) ? setCount(count + value) : count
     const { id, title, defaultProductVariant, verticalImage, mainImage, landscapeImage, backgroundImage, body, content, prices, access } = props;
+    const router = useRouter()
+    console.log(access)
+    const handlePlay = () => {
+        const path = `/watch/${access.content.slug.current}/${access.content._id}`
+        if(!access.expires) {
+            if(confirm('Once you start watching, you have 3 days to finish')) {
+                fetch(`/api/content/${id}/start`)
+                .then(res => {
+                    if(res.ok) {
+                        router.push(path)
+                    }
+                })
+            }
+        } else {
+            router.push(path)
+        }
+    }
 
     return (
         <Fragment>
@@ -46,11 +65,9 @@ const ContentPage = (props) => {
                                         prices?.available === true || access
                                         ? (
                                             access
-                                            ? <Link href={`/watch/${access.content._id}`}>
-                                                <a className=" inline-flex items-center px-4 py-2 bg-white text-sm font-medium rounded hover:text-red-700 focus:outline-none transition ease-in-out duration-150">
-                                                    <BsPlayFill className="mr-1" size={20} /> Play
-                                                </a>
-                                            </Link>
+                                            ? <button onClick={handlePlay} className=" inline-flex items-center px-4 py-2 bg-white text-sm font-medium rounded hover:text-red-700 focus:outline-none transition ease-in-out duration-150">
+                                                <BsPlayFill className="mr-1" size={20} /> Play
+                                            </button>
                                             : <PricingButtons contentId={id} prices={prices} />
                                         )
                                         : <div className="px-4 py-2 rounded-md bg-gray-500 bg-opacity-50 text-white text-sm flex items-center">
@@ -81,7 +98,7 @@ const ContentPage = (props) => {
                             : <h4 className="mt-2">This content is not available in your country.</h4>
                         }
                     </div> */}
-                    <Json json={content} />
+                    {/* <Json json={content} /> */}
                 </div>
             </div>
         </Fragment>
