@@ -54,7 +54,7 @@ const ContentPage = (props) => {
                                 }}
                             />
                             {
-                                access?.expired === false && access.type === 'rent'
+                                access && ccess?.expired === false && access.type === 'rent'
                                 ? (
                                     <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-md rounded-tr-md inline-block bg-gray-700 bg-opacity-50 text-white text-sm">
                                         Expires in {formatDistanceStrict(
@@ -75,7 +75,7 @@ const ContentPage = (props) => {
                                     ? (
                                         prices?.available === true || access
                                         ? (
-                                            !access.expired
+                                            access && !access.expired
                                             ? <button onClick={handlePlay} className=" inline-flex items-center px-4 py-2 bg-white text-sm font-medium rounded hover:text-red-700 focus:outline-none transition ease-in-out duration-150">
                                                 <BsPlayFill className="mr-1" size={20} /> Play
                                             </button>
