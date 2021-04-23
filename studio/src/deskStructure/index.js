@@ -1,6 +1,7 @@
-import S from "@sanity/desk-tool/structure-builder";
-import { MdWeb, MdSettings, MdWhatshot, MdLooks } from "react-icons/md";
-import ads from "./ads";
+import S from "@sanity/desk-tool/structure-builder"
+import { MdWeb, MdSettings, MdWhatshot, MdLooks, MdVideoLibrary, MdPlayCircleOutline, MdPerson } from "react-icons/md"
+import { ImLoop2 } from "react-icons/im"
+// import ads from "./ads";
 import categories from "./categories";
 import person from "./person";
 
@@ -19,10 +20,17 @@ const hiddenDocTypes = (listItem) =>
     "vendor",
     "siteSettings",
     "social",
-    "ad",
+    // "ad",
+    "product",
+    "popup",
+    "brand",
+    "swag",
     "page",
-    // "product",
-    "film",
+    "content",
+    "genre",
+    "subscription",
+    "user",
+    "video",
     "route",
     "siteConfig",
     "taxRate",
@@ -32,9 +40,13 @@ const hiddenDocTypes = (listItem) =>
 
 export default () =>
   S.list()
-    .title("Video On Demand CMS")
+    .title("VOD CMS")
     .items([
-      S.documentTypeListItem("film").title("Film"),
+      S.listItem().title("Content").schemaType("content").child(S.documentTypeList("content")),
+      S.listItem().title("Subscriptions").schemaType("subscription").child(S.documentTypeList("subscription")),
+      S.listItem().title("Videos").schemaType("video").child(S.documentTypeList("video")),
+      S.listItem().title("Genre").schemaType("genre").child(S.documentTypeList("genre")),
+      S.listItem().title("Users").schemaType("user").child(S.documentTypeList("user")),
       S.listItem()
         .title("Website")
         .icon(MdWeb)
@@ -56,7 +68,7 @@ export default () =>
               // S.documentTypeListItem("social").title("Social"),
             ])
         ),
-      ads,
+      // ads,
       ...S.documentTypeListItems().filter(hiddenDocTypes),
     ]);
 
@@ -74,13 +86,6 @@ export const getDefaultDocumentNode = (props) => {
       S.view.form(),
       S.view.component(ProductsOverviewPreview).title("Products Overview"),
       S.view.component(ProductPagePreview).title("Product Page"),
-    ]);
-  }
-  if (schemaType === "film") {
-    return S.document().views([
-      S.view.form(),
-      S.view.component(ProductsOverviewPreview).title("Films Overview"),
-      S.view.component(ProductPagePreview).title("Film Page"),
     ]);
   }
   if (schemaType === "swag") {

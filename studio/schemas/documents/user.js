@@ -8,6 +8,12 @@ export default {
     title: "User",
     liveEdit: true,
     icon: MdPerson,
+    preview: {
+        select: {
+            title: 'name',
+            subtitle: 'email'
+        }
+    },
     fields: [
         {
             name: "name",

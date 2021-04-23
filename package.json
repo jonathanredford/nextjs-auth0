@@ -24,6 +24,7 @@
     "@tailwindcss/forms": "^0.3.2",
     "autoprefixer": "^10.2.5",
     "crypto": "^1.0.1",
+    "date-fns": "^2.21.1",
     "get-video-id": "^3.2.0",
     "ipdata": "^2.2.0",
     "js-cookie": "^2.2.1",

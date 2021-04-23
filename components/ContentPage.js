@@ -1,12 +1,10 @@
 import { Fragment, useState, useContext } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { urlFor, PortableText, getClient } from "../utils/sanity"
 import Json from "../components/Json"
 import { ProxyContext } from '../context/proxy-context'
-import { useSession } from 'next-auth/client'
 import { BsPlayFill } from 'react-icons/bs'
-import { Router } from 'next/dist/client/router'
+import { formatDistanceStrict } from 'date-fns'
 
 const ContentPage = (props) => {
     const [ proxy ] = useContext(ProxyContext)
@@ -31,6 +29,8 @@ const ContentPage = (props) => {
         }
     }
 
+    console.log(access)
+
     return (
         <Fragment>
             <div className="container mx-auto px-6 pt-48">
@@ -42,7 +42,7 @@ const ContentPage = (props) => {
                 </div>
                 <div className="relative">
                     <div className="flex">
-                        <div className="w-52 flex-shrink-0">
+                        <div className="w-52 flex-shrink-0 relative">
                             <div
                                 className="rounded-md aspect-w-2 aspect-h-3 bg-cover"
                                 style={{
@@ -53,6 +53,17 @@ const ContentPage = (props) => {
                                       .quality(80)}`,
                                 }}
                             />
+                            {
+                                access?.expired === false && access.type === 'rent'
+                                ? (
+                                    <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-md rounded-tr-md inline-block bg-gray-700 bg-opacity-50 text-white text-sm">
+                                        Expires in {formatDistanceStrict(
+                                            new Date(),
+                                            new Date(access.expires)
+                                        )}
+                                    </div>
+                                ) : null
+                            }
                         </div>
                         <div className="w-full mx-auto mt-5 md:ml-8 md:mt-0">
                             <h3 className="text-gray-100 text-4xl">{title}</h3>
@@ -64,7 +75,7 @@ const ContentPage = (props) => {
                                     ? (
                                         prices?.available === true || access
                                         ? (
-                                            access
+                                            !access.expired
                                             ? <button onClick={handlePlay} className=" inline-flex items-center px-4 py-2 bg-white text-sm font-medium rounded hover:text-red-700 focus:outline-none transition ease-in-out duration-150">
                                                 <BsPlayFill className="mr-1" size={20} /> Play
                                             </button>

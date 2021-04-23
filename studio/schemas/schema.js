@@ -18,7 +18,6 @@ import route from "./documents/route";
 import siteConfig from "./documents/siteConfig";
 import person from "./documents/person";
 import popup from "./documents/popup";
-import film from './documents/film'
 import content from './documents/content'
 import subscription from './documents/subscription'
 import taxRate from './documents/taxRate'
@@ -65,14 +64,13 @@ export default createSchema({
     product,
     content,
     subscription,
-    film,
     popup,
     vendor,
     category,
     genre,
     brand,
     social,
-    ad,
+    // ad,
     swag,
     page,
     route,

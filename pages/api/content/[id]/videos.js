@@ -1,7 +1,7 @@
 import { getSession } from 'next-auth/client'
 import { groq } from "next-sanity"
 import { getClient } from "../../../../utils/sanity"
-import isRentalExpired from '../../../../lib/isRentalExpired'
+import isExpired from '../../../../lib/isExpired'
 
 const groqQuery = groq`*[_id == $id]{
     slug,
@@ -33,7 +33,7 @@ export default async (req, res) => {
         let watchWindowExpiry = new Date(contentAccess.createdAt)
         watchWindowExpiry.setDate(watchWindowExpiry.getDate() + watchWindowExpiry.rentalStartWindow)
 
-        if(contentAccess.started === true && !isRentalExpired(contentAccess.expires) || !isRentalExpired(watchWindowExpiry)) {
+        if(contentAccess.started === true && !isExpired(contentAccess.expires) || !isExpired(watchWindowExpiry)) {
             const contentData = await getClient().fetch(groqQuery, {
                 id: query.id,
             });
