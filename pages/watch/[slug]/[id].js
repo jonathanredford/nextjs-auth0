@@ -82,7 +82,7 @@ function WatchPageContainer({ preview, contentData }) {
 
     if(loading || !content) {
         return (
-            <div className="absolute inset-0 flex items-center justify-center" style={{background: `url(${urlFor(contentData.thumbnail).auto("format").fit("crop").width(1920).quality(80).url()}) no-repeat center center fixed`}}>
+            <div className="absolute inset-0 flex items-center justify-center" style={{background: `url(${urlFor(contentData?.thumbnail).auto("format").fit("crop").width(1920).quality(80).url()}) no-repeat center center fixed`}}>
                 <div className="absolute inset-0 bg-gray-900 opacity-90" />
                 <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
