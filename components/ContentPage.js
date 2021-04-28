@@ -64,7 +64,7 @@ const ContentPage = (props) => {
                                                 )}`
                                             )
                                             : (
-                                                `Remaining: ${formatDistanceToNowStrict(
+                                                `Expires in ${formatDistanceToNowStrict(
                                                     addDays(new Date(access.rentWindowStartDate), access.rentStartWindow)
                                                 )}`
                                             )
