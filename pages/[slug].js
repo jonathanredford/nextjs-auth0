@@ -8,7 +8,7 @@ import { getClient, usePreviewSubscription, urlFor } from "../utils/sanity"
 import { ProxyContext } from '../context/proxy-context'
 import getPrices, { getPlan } from '../lib/getPrices'
 import Json from '../components/Json'
-import isExpired from '../lib/isExpired'
+import getAccess from '../lib/getAccess'
 
 const query = groq`*[_type == "content" && slug.current == $slug]{
     ...,
@@ -48,7 +48,7 @@ function ContentPageContainer({ contentData, preview, query }) {
     const [ proxy ] = useContext(ProxyContext)
     const [ session, loading ] = useSession()
     const [ prices, setPrices ] = useState(null)
-    const [ access, setAccess ] = useState(false)
+    const [ access, setAccess ] = useState(null)
 
     
     const router = useRouter();
@@ -77,18 +77,8 @@ function ContentPageContainer({ contentData, preview, query }) {
     }, [proxy])
 
     useEffect(() => {
-        getAccess(content, session)
+        setAccess( getAccess(content, session) )
     }, [session])
-
-    const getAccess = (content, session) => {
-        const library = session?.user?.access?.library
-        if(!library) return
-        const libraryContent = library.find(item => item.content._id === content._id)
-        if(libraryContent) {
-            libraryContent.expired = isExpired(libraryContent.expires)
-            setAccess(libraryContent)
-        }
-    }
 
     return (
         <>
@@ -144,6 +134,6 @@ export async function getStaticPaths() {
         paths: paths.map((slug) => ({ params: { slug } })),
         fallback: true,
     };
-  }
+}
 
 export default ContentPageContainer;

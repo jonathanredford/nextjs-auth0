@@ -61,15 +61,20 @@ export default {
                         let hasDuplicate = false
                         const contentIds = []
                         const duplicates = []
-                        for(var i = 0; i < array.length; i++) {
-                            const id = array[i].content._ref
-                            if(contentIds.indexOf(id) === -1) {
-                                contentIds.push(id)
-                            } else {
-                                duplicates.push(array[i])
-                                hasDuplicate = true
-                                i = array.length
+                        try {
+                            for(var i = 0; i < array.length; i++) {
+                                const id = array[i].content._ref
+                                if(contentIds.indexOf(id) === -1) {
+                                    contentIds.push(id)
+                                } else {
+                                    duplicates.push(array[i])
+                                    hasDuplicate = true
+                                    i = array.length
+                                }
                             }
+                        } catch(err) {
+                            console.log(err)
+                            return true
                         }
                         if(hasDuplicate) {
                             const duplicatePaths = duplicates.map((obj, index) => [{_key: obj._key}] || [index])
@@ -154,6 +159,27 @@ export default {
                                     })
                                 },
                                 {
+                                    name: "rentWindowStartDate",
+                                    title: "Rental window start date",
+                                    type: "datetime",
+                                    description: "Choose the date the rental window starts from. In most cases, the current date and time should be used. Only applicable for rentals.",
+                                    validation: Rule => Rule.custom((rentalStartDate, context) => {
+                                        if(context.parent.type === 'rent') {
+                                            if(!rentalStartDate) {
+                                                return 'A rental start date must be selected'
+                                            }
+                                        }
+                                        return true
+                                    }),
+                                    options: {
+                                        dateFormat: 'dddd, MMMM Do YYYY -',
+                                        timeFormat: 'HH:mmA',
+                                        timeStep: 15,
+                                        calendarTodayLabel: 'Now'
+                                    }
+                                    // readOnly: true,
+                                },
+                                {
                                     name: "rentWatchWindow",
                                     title: "Rental watch duration",
                                     type: "number",
@@ -187,7 +213,7 @@ export default {
                                     title: "Started",
                                     type: "boolean",
                                     // readOnly: true
-                                }
+                                },
                             ]
                         }
                     ]

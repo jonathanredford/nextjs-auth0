@@ -4,7 +4,7 @@ import { urlFor, PortableText, getClient } from "../utils/sanity"
 import Json from "../components/Json"
 import { ProxyContext } from '../context/proxy-context'
 import { BsPlayFill } from 'react-icons/bs'
-import { formatDistanceStrict } from 'date-fns'
+import { formatDistanceToNowStrict, addDays } from 'date-fns'
 
 const ContentPage = (props) => {
     const [ proxy ] = useContext(ProxyContext)
@@ -12,7 +12,6 @@ const ContentPage = (props) => {
     const handleCount = (value) => !(count === 0 && value === -1) ? setCount(count + value) : count
     const { id, title, defaultProductVariant, verticalImage, mainImage, landscapeImage, backgroundImage, body, content, prices, access } = props;
     const router = useRouter()
-    console.log(access)
     const handlePlay = () => {
         const path = `/watch/${access.content.slug.current}/${access.content._id}`
         if(access.type === 'rent' && !access.expires) {
@@ -54,13 +53,22 @@ const ContentPage = (props) => {
                                 }}
                             />
                             {
-                                access && ccess?.expired === false && access.type === 'rent'
+                                access && access.expired === false
                                 ? (
                                     <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-md rounded-tr-md inline-block bg-gray-700 bg-opacity-50 text-white text-sm">
-                                        Expires in {formatDistanceStrict(
-                                            new Date(),
-                                            new Date(access.expires)
-                                        )}
+                                        {
+                                            access.expires
+                                            ? (
+                                                `Expires in ${formatDistanceToNowStrict(
+                                                    new Date(access.expires)
+                                                )}`
+                                            )
+                                            : (
+                                                `Remaining: ${formatDistanceToNowStrict(
+                                                    addDays(new Date(access.rentWindowStartDate), access.rentStartWindow)
+                                                )}`
+                                            )
+                                        }
                                     </div>
                                 ) : null
                             }

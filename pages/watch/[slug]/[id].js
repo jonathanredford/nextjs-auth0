@@ -1,5 +1,6 @@
 import Error from 'next/error'
 import { useRouter } from 'next/router'
+import { groq } from "next-sanity"
 import { getClient, usePreviewSubscription, urlFor } from '../../../utils/sanity'
 import { useSession } from 'next-auth/client'
 import LibraryPage from '../../../components/LibraryPage'
@@ -9,12 +10,14 @@ import Link from 'next/link'
 import { BsArrowLeft } from 'react-icons/bs'
 import { Fragment } from 'react'
 
-function WatchPageContainer({ preview }) {
+function WatchPageContainer({ preview, contentData }) {
     const [ session, loading ] = useSession()
     const [ content, setContent ] = useState(null)
     const [ error, setError ] = useState(null)
     const [ isShown, setIsShown ] = useState(false)
     const router = useRouter();
+
+    console.log(contentData)
 
     useEffect(() => {
         if(router.query.id) {
@@ -71,12 +74,16 @@ function WatchPageContainer({ preview }) {
             console.log(err)
             setError(err)
         })
+        jwplayer().on('playlistComplete', () => {
+            router.push(`/${content.slug.current}`)
+        })
     }
 
 
     if(loading || !content) {
         return (
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center" style={{background: `url(${urlFor(contentData.thumbnail).auto("format").fit("crop").width(1920).quality(80).url()}) no-repeat center center fixed`}}>
+                <div className="absolute inset-0 bg-gray-900 opacity-90" />
                 <svg className="animate-spin -ml-1 mr-3 h-10 w-10 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -119,5 +126,38 @@ function WatchPageContainer({ preview }) {
 }
 
 WatchPageContainer.Layout = NoLayout
+
+export async function getStaticProps({ params, preview = false }) {
+    console.log(params)
+    const query = groq`*[_type == "content" && slug.current == $slug][0]{
+        "thumbnail": videos[0]->.thumbnail
+    }`
+    const contentData = await getClient(preview).fetch(query, {
+        slug: params.slug,
+    });
+
+    // console.log(JSON.stringify(contentData.pricing, null, 2))
+
+    return {
+        props: { preview, contentData },
+        revalidate: 120,
+    };
+}
+
+export async function getStaticPaths() {
+    const paths = await getClient().fetch(
+        `*[_type == "content" && defined(slug.current)]{
+            "slug": slug.current,
+            "id": _id
+        }`
+    );
+
+    console.log(paths)
+
+    return {
+        paths: paths.map((options) => ({ params: { slug: options.slug, id: options.id } })),
+        fallback: true,
+    };
+}
 
 export default WatchPageContainer;
