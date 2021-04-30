@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useSession } from 'next-auth/client'
+import getAccess from '../lib/getAccess'
 import ProfileForm from './ProfileForm'
 import ContentCard from './ContentCard'
 
 function LibraryPage({ library }) {
+    const [ session, loading ] = useSession()
     return (
         <div className="lg:container mx-auto max-w-screen-1xl px-6">
 
@@ -21,11 +23,13 @@ function LibraryPage({ library }) {
                     <span className="mt-3 text-sm text-gray-500">Access your purchases</span>
                     
                     <div className="grid gap-x-3 sm:gap-x-6 gap-y-2  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 mt-6">
-                        {library.map((item, index) => {
-                            // console.log(item)
-                            // return <ContentCard key={item.content._id} {...item.content} />
-                            return <ContentCard key={index} {...item.content} />
-                        })}
+                    {library.map((contentAccess) => {
+                        const access = getAccess(contentAccess.content, session)
+                        const { content } = contentAccess
+                        console.log(access)
+                        if(!content) return null
+                        return <ContentCard key={content._id} access={access} {...content} showExpired={true} />
+                    })}
                     </div>
                 </div>
             </div>

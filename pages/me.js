@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/client'
 import LibraryPage from '../components/LibraryPage'
 
-function LibraryPageContainer({ contentsData, preview }) {
+function LibraryPageContainer() {
   const [ session, loading ] = useSession()
 
   if(loading) return null

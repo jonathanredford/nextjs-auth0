@@ -4,7 +4,7 @@ import { urlFor, PortableText, getClient } from "../utils/sanity"
 import Json from "../components/Json"
 import { ProxyContext } from '../context/proxy-context'
 import { BsPlayFill } from 'react-icons/bs'
-import { formatDistanceToNowStrict, addDays } from 'date-fns'
+import ContentCardVertical from './ContentCardVertical'
 
 const ContentPage = (props) => {
     const [ proxy ] = useContext(ProxyContext)
@@ -42,36 +42,7 @@ const ContentPage = (props) => {
                 <div className="relative">
                     <div className="flex">
                         <div className="w-52 flex-shrink-0 relative">
-                            <div
-                                className="rounded-md aspect-w-2 aspect-h-3 bg-cover"
-                                style={{
-                                  backgroundImage: `url('${urlFor(verticalImage)
-                                      .auto("format")
-                                      .fit("crop")
-                                      .width(768)
-                                      .quality(80)}`,
-                                }}
-                            />
-                            {
-                                access && access.expired === false
-                                ? (
-                                    <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-md rounded-tr-md inline-block bg-gray-700 bg-opacity-50 text-white text-sm">
-                                        {
-                                            access.expires
-                                            ? (
-                                                `Expires in ${formatDistanceToNowStrict(
-                                                    new Date(access.expires)
-                                                )}`
-                                            )
-                                            : (
-                                                `Expires in ${formatDistanceToNowStrict(
-                                                    addDays(new Date(access.rentWindowStartDate), access.rentStartWindow)
-                                                )}`
-                                            )
-                                        }
-                                    </div>
-                                ) : null
-                            }
+                            <ContentCardVertical verticalImage={verticalImage} access={access} />
                         </div>
                         <div className="w-full mx-auto mt-5 md:ml-8 md:mt-0">
                             <h3 className="text-gray-100 text-4xl">{title}</h3>

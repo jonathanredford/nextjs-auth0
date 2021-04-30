@@ -4,29 +4,29 @@ import { getClient, usePreviewSubscription } from "../utils/sanity";
 import ContentsPage from "../components/ContentsPage";
 
 const query = `//groq
-  *[_type == "content" && defined(slug.current)]
+    *[_type == "content" && defined(slug.current)]
 `;
 
 function ContentsPageContainer({ contentsData, preview }) {
-  const router = useRouter();
-  if (!router.isFallback && !contentsData) {
-    return <Error statusCode={404} />;
-  }
-  const { data: contents } = usePreviewSubscription(query, {
-    initialData: contentsData,
-    enabled: preview || router.query.preview !== null,
-  });
+    const router = useRouter();
+    if (!router.isFallback && !contentsData) {
+        return <Error statusCode={404} />;
+    }
+    const { data: contents } = usePreviewSubscription(query, {
+        initialData: contentsData,
+        enabled: preview || router.query.preview !== null,
+    });
 
-  return <ContentsPage contents={contents} />;
+    return <ContentsPage contents={contents} />;
 }
 
 export async function getStaticProps({ params = {}, preview = false }) {
-  const contentsData = await getClient(preview).fetch(query);
+    const contentsData = await getClient(preview).fetch(query);
 
-  return {
-    props: { preview, contentsData },
-    revalidate: 120
-  };
+    return {
+        props: { preview, contentsData },
+        revalidate: 120
+    };
 }
 
 // export async function getServerSideProps({ params = {}, req, res, preview = false }) {
