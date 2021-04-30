@@ -24,7 +24,7 @@ function ContentCard({ _id, title, landscapeImage, slug, access, showExpired }) 
                 </div>
                 {
                     access && (access.expired === false || showExpired === true) && (
-                        <div className="absolute top-0 right-0 px-3 py-1 rounded-bl-md rounded-tr-md inline-block bg-gray-700 bg-opacity-50 text-white text-sm">
+                        <div className="absolute bottom-0 right-0 px-3 py-1 rounded-bl-md rounded-tr-md inline-block bg-gray-700 bg-opacity-50 text-white text-sm">
                             {
                                 access.expired && showExpired && 'Expired'
                             }
