@@ -38,7 +38,8 @@
     "react-hook-form": "^7.2.2",
     "react-icons": "^4.2.0",
     "react-toastify": "^7.0.3",
-    "stripe": "^8.142.0"
+    "stripe": "^8.142.0",
+    "swr": "^0.5.6"
   },
   "devDependencies": {
     "@sanity/cli": "^2.7.2",
