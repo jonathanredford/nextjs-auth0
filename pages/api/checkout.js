@@ -91,6 +91,7 @@ export default async (req, res) => {
         const mode = query.type === 'subscribe' ? 'subscription' : 'payment'
         const sessionOptions = {
             mode: mode,
+            customer: user.customerId,
             payment_method_types: ['card'],
             success_url: callback_url + '?checkout=success',
             cancel_url: callback_url + '?checkout=cancel',

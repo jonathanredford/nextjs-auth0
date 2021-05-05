@@ -38,6 +38,12 @@ export default {
             readOnly: true,
         },
         {
+            name: "customerId",
+            type: "string",
+            title: "Stripe Customer ID",
+            readOnly: true,
+        },
+        {
             name: "access",
             type: "object",
             title: "Access",

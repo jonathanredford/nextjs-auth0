@@ -24,6 +24,7 @@ export default NextAuth({
              if(session.user?.email) {
                  session.user._id = user._id
                  session.user.access = user.access
+                 session.user.customerId = user.customerId
              }
             //  console.log(session)
             return session
