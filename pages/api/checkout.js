@@ -96,6 +96,7 @@ export default async (req, res) => {
             success_url: callback_url + '?checkout=success',
             cancel_url: callback_url + '?checkout=cancel',
             line_items: [],
+            allow_promotion_codes: true,
             metadata: {
                 contentId: _id,
                 userId: user._id,

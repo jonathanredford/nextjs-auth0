@@ -28,7 +28,15 @@ const ContentPage = (props) => {
         }
     }
 
-    console.log(access)
+    // console.log('ACCESS: ', access)
+
+    // const canWatch = () => {
+    //     let result = false
+    //     if(!access) return result
+    //     if(!access.expired) result = true
+    //     if()
+
+    // }
 
     return (
         <Fragment>

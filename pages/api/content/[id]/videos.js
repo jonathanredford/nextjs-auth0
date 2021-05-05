@@ -5,10 +5,25 @@ import isExpired from '../../../../lib/isExpired'
 import getAccess from '../../../../lib/getAccess'
 
 const groqQuery = groq`*[_id == $id]{
+    _id,
     slug,
     title,
     createdAt,
     updatedAt,
+    "pricing": {
+        ...pricing,
+        "plans": [
+            ...pricing.plans[]->{
+                    ...,
+                    "price": [
+                        ...price[]{
+                            ...,
+                            taxRate->
+                        }
+                    ]
+              }
+        ],
+    },
     videos[]->{
         _id,
         _type,
@@ -27,14 +42,14 @@ export default async (req, res) => {
     const { query } = req
 
     try {
-        const access = getAccess({_id: query.id}, session)
+        const contentData = await getClient().fetch(groqQuery, {
+            id: query.id,
+        });
+        const access = getAccess(contentData, session)
         if(access) {
             if(access.type === 'rent' && !access.expires) {
                 return res.status(401).end()
             }
-            const contentData = await getClient().fetch(groqQuery, {
-                id: query.id,
-            });
             return res.json(JSON.stringify(contentData, null, 2))
         } else {
             return res.status(401).end()
