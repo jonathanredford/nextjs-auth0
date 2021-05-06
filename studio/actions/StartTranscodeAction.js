@@ -14,33 +14,6 @@ export function StartTranscodeAction(props) {
         return null
     }
 
-    // return {
-    //     label: `Edit title`,
-    //     onHandle: () => {
-    //       setDialogOpen(true)
-    //     },
-    //     dialog: isDialogOpen && {
-    //       type: 'modal',
-    //       onClose: () => {
-    //         setDialogOpen(false)
-    //       },
-    //       content: (
-    //         <>
-    //           <h2>Edit title field</h2>
-    //           <input
-    //             type="text"
-    //             value="hello"
-    //             onChange={event =>
-    //              patch.execute([
-    //                               {set: {'title': event.currentTarget.value}}
-    //               ])}
-    //           />
-    //           <button onClick={() => setDialogOpen(false)}>Done</button>
-    //         </>
-    //       )
-    //     }
-    // }
-
     return {
         label: "Transcode video",
         icon: BsCollectionPlay,
