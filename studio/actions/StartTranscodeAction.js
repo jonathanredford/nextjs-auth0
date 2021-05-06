@@ -5,8 +5,7 @@ import { BsCollectionPlay } from 'react-icons/bs'
 export function StartTranscodeAction(props) {
     const { id, type, published, draft, onComplete } = props
     const [isDialogOpen, setDialogOpen] = useState(false)
-
-    console.log(props)
+    
     // if( (type !== 'content') || (published?.status !== 'ingested') ) {
     //     return null
     // }
